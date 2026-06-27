@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "ether_ghost"
+version = "0.2.5"
+description = ""
+authors = ["Marven11 <110723864+Marven11@users.noreply.github.com>"]
+readme = "README.md"
+include = [
+    { path = "public", format = ["sdist", "wheel"] },
+    { path = "ether_ghost/wsm_payloads", format = ["sdist", "wheel"] }
+]
+
+
+[tool.poetry.scripts]
+ether_ghost = "ether_ghost.__main__:main"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pydantic = "^2"
+fastapi = "*"
+requests = "*"
+pycryptodome = "*"
+sqlalchemy = "*"
+uvicorn = "*"
+sqlalchemy-utils = "*"
+httpx = {extras = ["socks"], version = "*"}
+chardet = "^5.2.0"
+python-multipart = "*"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.0"
+mypy = "^1.8.0"
+pytest = "^9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

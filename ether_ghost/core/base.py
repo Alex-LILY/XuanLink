@@ -1,0 +1,281 @@
+"""定义session的接口和输入输出"""
+
+import typing as t
+from dataclasses import dataclass
+from ..utils.user_agents import random_user_agent
+from ..utils.db import get_settings
+
+import httpx
+
+
+class ProcessProtocol(t.Protocol):
+    """进程协议，参考subprocess.Popen设计"""
+
+    @property
+    def pid(self) -> t.Union[int, str]:
+        """获取进程的PID"""
+        ...
+
+    async def send_signal(self, sig: int) -> None:
+        """向进程发送信号，如signal.SIGKILL"""
+        ...
+
+    async def write_stdin(self, data: bytes) -> None:
+        """向进程的标准输入写入数据"""
+        ...
+
+    async def read_stdout_stderr(self) -> t.Tuple[bytes, bytes]:
+        """同时读取stdout和stderr"""
+        ...
+
+    async def wait(self, timeout: float) -> t.Union[int, None]:
+        """等待进程结束，必须指定超时时间
+
+        Returns: 进程退出码，超时时返回None
+        """
+        ...
+
+
+USER_AGENT = random_user_agent()
+
+
+class OptionAlternative(t.TypedDict):
+    name: str
+    value: str
+
+
+class Option(t.TypedDict):
+    id: str
+    name: str
+    type: t.Literal["text", "select", "checkbox"]
+    placeholder: t.Union[str, None]
+    default_value: t.Any
+    alternatives: t.Union[t.List[OptionAlternative], None]
+
+
+class OptionGroup(t.TypedDict):
+    name: str
+    options: t.List[Option]
+
+
+@dataclass
+class DirectoryEntry:
+    """文件夹中某一项的信息"""
+
+    name: str
+    permission: str
+    filesize: int
+    entry_type: t.Literal["dir", "file", "link-dir", "link-file", "unknown"] = "file"
+
+
+@dataclass
+class BasicInfoEntry:
+    """有关session的一项基本信息"""
+
+    key: str
+    value: str
+
+
+class HttpResponseDict(t.TypedDict):
+    """HTTP响应字典"""
+
+    status_code: int
+    headers: t.Dict[str, str]
+    body: bytes
+
+
+# Session对象会在处理一个请求的时候创建，请求结束时立即丢弃
+# 所以Session对象基本上是无状态的，状态会在请求结束后被丢弃
+
+
+class SessionInterface:
+    """Session接口"""
+
+    session_type: t.ClassVar[str]
+    readable_name: t.ClassVar[str]
+    conn_options: t.ClassVar[t.List[OptionGroup]]
+
+    async def execute_cmd(self, cmd: str) -> str:
+        """在目标上执行命令"""
+        raise NotImplementedError()
+
+    async def test_usablility(self) -> bool:
+        """测试session的可用性"""
+        raise NotImplementedError()
+
+    async def list_dir(self, dir_path: str) -> t.List[DirectoryEntry]:
+        """列出某个文件夹中的内容，包括`.`和`..`，如果没有内容则会填充`..`"""
+        raise NotImplementedError()
+
+    async def mkdir(self, dir_path: str) -> None:
+        """创建文件夹"""
+        raise NotImplementedError()
+
+    async def get_file_contents(
+        self, filepath: str, max_size: int = 1024 * 200
+    ) -> bytes:
+        """获取文件的内容，内容是一个字节序列，不是已经解码的字符串"""
+        raise NotImplementedError()
+
+    async def put_file_contents(self, filepath: str, content: bytes) -> bool:
+        """保存文件的内容，内容是一个字节序列，不是已经解码的字符串"""
+        raise NotImplementedError()
+
+    async def modify_file(
+        self,
+        filepath: str,
+        old_str: str,
+        new_str: str,
+        replace_strategy: t.Union[str, None] = None,
+    ) -> None:
+        """修改文件内容，将old_str替换为new_str
+
+        replace_strategy: "once"仅替换第一次出现, "all"替换所有,
+        None(默认)验证恰好出现一次后替换
+        """
+        raise NotImplementedError()
+
+    async def delete_file(self, filepath: str) -> bool:
+        """删除文件"""
+        raise NotImplementedError()
+
+    async def move_file(self, filepath: str, new_filepath: str) -> None:
+        """移动文件到新的目录"""
+        raise NotImplementedError()
+
+    async def copy_file(self, filepath: str, new_filepath: str) -> None:
+        """复制一份当前文件到新的位置"""
+        raise NotImplementedError()
+
+    async def upload_file(
+        self, filepath: str, content: bytes, callback: t.Union[t.Callable, None] = None
+    ) -> bool:
+        """上传文件，内容是一个字节序列，不是已经解码的字符串"""
+        raise NotImplementedError()
+
+    async def download_file(
+        self, filepath: str, callback: t.Union[t.Callable, None] = None
+    ) -> bytes:
+        """下载，内容是一个字节序列，不是已经解码的字符串"""
+        raise NotImplementedError()
+
+    async def chmod(self, filepath: str, mode: str) -> None:
+        """修改文件或目录的权限，mode 为八进制字符串（如 755）"""
+        raise NotImplementedError()
+
+    async def send_bytes_over_tcp(
+        self,
+        host: str,
+        port: int,
+        content: bytes,
+        send_method: t.Union[str, None] = None,
+    ) -> t.Union[bytes, None]:
+        """把一串字节通过TCP发送到其他机器上，可以指定对应的发送方法"""
+        raise NotImplementedError()
+
+    async def get_send_tcp_support_methods(self) -> t.List[str]:
+        """得到发送字节支持的TCP方法"""
+        raise NotImplementedError()
+
+    async def get_pwd(self) -> str:
+        """获取当前的目录"""
+        raise NotImplementedError()
+
+    async def get_basicinfo(self) -> t.List[BasicInfoEntry]:
+        """获取当前的基本信息"""
+        raise NotImplementedError()
+
+    async def send_http_request(
+        self,
+        url: str,
+        method: str = "GET",
+        headers: t.Optional[t.Dict[str, str]] = None,
+        params: t.Optional[t.Dict[str, t.Any]] = None,
+        data: t.Optional[t.Union[str, bytes]] = None,
+    ) -> HttpResponseDict:
+        """通过受控端发送HTTP请求"""
+        raise NotImplementedError()
+
+    async def create_process(
+        self,
+        argv: t.List[str],
+        overrides_env: t.Union[t.Dict[str, str], None] = None,
+    ) -> ProcessProtocol:
+        """创建一个持续运行的进程
+
+        默认继承当前环境变量，可以使用overrides_env覆盖环境变量。
+
+        Args:
+            argv: 进程参数列表
+            overrides_env: 覆盖的环境变量，None表示不覆盖
+
+        Returns:
+            兼容ProcessProtocol的进程对象
+        """
+        raise NotImplementedError()
+
+
+class PHPSessionInterface(SessionInterface):
+    """PHP Session接口"""
+
+    async def download_phpinfo(self) -> bytes:
+        """获取当前的phpinfo文件"""
+        raise NotImplementedError()
+
+    async def php_eval(self, code: str) -> str:
+        """执行给定的代码，使用eval"""
+        raise NotImplementedError()
+
+    async def php_eval_beforebody(self, code: str) -> t.Tuple[int, str]:
+        """执行给定的代码，不使用任何wrapper
+
+        保证在此之前不使用echo等输出body正文，但不能自动从HTML中提取代码输出"""
+        # 为了保证能正常地打开和关闭php session
+        raise NotImplementedError()
+
+    async def emulated_antsword(self, body: bytes) -> t.Tuple[int, str]:
+        """解析蚁剑给的body, 返回raw的HTTP返回码和内容"""
+        raise NotImplementedError()
+
+
+class SessionTypeInfo(t.TypedDict):
+    constructor: t.Callable[[dict], SessionInterface]
+    options: t.List[OptionGroup]
+    readable_name: str
+
+
+session_type_info: t.Dict[str, SessionTypeInfo] = {}
+
+
+def register_session(cls):
+    """装饰session class, 注册一个session
+    不要使用这个函数注册connector的session
+    `register_connector`会自动使用其他方式注册对应的connector
+    """
+    session_type_info[cls.session_type] = {
+        "constructor": cls,
+        "options": cls.conn_options,
+        "readable_name": cls.readable_name,
+    }
+    return cls
+
+
+def get_http_client(session_conn: t.Union[dict, None] = None, **kwargs):
+    proxy = None
+    if session_conn is not None:
+        proxy = session_conn.get("proxy") or None
+    if proxy is None and get_settings().get("proxy", None):
+        proxy = get_settings().get("proxy", None)
+    return httpx.AsyncClient(headers={"User-Agent": USER_AGENT}, proxy=proxy, **kwargs)
+
+
+def proxy_option() -> Option:
+    """Common option for selecting a connection proxy"""
+    return Option(
+        id="proxy",
+        name="Proxy",
+        type="select",
+        placeholder="No proxy",
+        default_value="",
+        alternatives=[],
+    )

@@ -1,0 +1,1675 @@
+@import './base.css';
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.button {
+  height: var(--button-height);
+  min-width: 100px;
+  padding: var(--button-padding);
+  border: var(--button-border);
+  border-radius: var(--button-radius);
+  outline: none;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  align-items: center;
+  background-color: var(--button-bg);
+  color: var(--button-color);
+  box-shadow: var(--shadow-button);
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+.button-secondary {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-color);
+  border: var(--button-secondary-border);
+  box-shadow: none;
+}
+
+.button-secondary:hover {
+  background-color: var(--button-secondary-hover-bg);
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  transition: all 1s ease;
+  background-color: var(--font-color-secondary);
+}
+
+.shadow-box {
+  box-shadow: var(--shadow-card);
+}
+
+select option {
+  background-color: var(--card-bg);
+  color: var(--font-color-primary);
+}
+
+/* ============================
+   modern 主题全局组件增强
+   ============================ */
+
+body[data-theme="modern"] .button {
+  background: var(--button-bg);
+  background-color: transparent;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+body[data-theme="modern"] .button:hover {
+  background: var(--button-hover-bg);
+  background-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+body[data-theme="modern"] .button:active {
+  transform: translateY(0);
+}
+
+body[data-theme="modern"] .button-secondary {
+  background: var(--button-secondary-bg);
+  border: var(--button-secondary-border);
+  box-shadow: none;
+}
+
+body[data-theme="modern"] .button-secondary:hover {
+  background: var(--button-secondary-hover-bg);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+body[data-theme="modern"] .shadow-box,
+body[data-theme="modern"] .card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+}
+
+body[data-theme="modern"] .scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+body[data-theme="modern"] .scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+body[data-theme="modern"] .scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+}
+
+body[data-theme="modern"] .scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* 现代化输入框聚焦光晕 */
+body[data-theme="modern"] input[type="text"],
+body[data-theme="modern"] input[type="password"],
+body[data-theme="modern"] input[type="number"],
+body[data-theme="modern"] textarea,
+body[data-theme="modern"] select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body[data-theme="modern"] input[type="text"]:focus,
+body[data-theme="modern"] input[type="password"]:focus,
+body[data-theme="modern"] input[type="number"]:focus,
+body[data-theme="modern"] textarea:focus,
+body[data-theme="modern"] select:focus {
+  outline: none;
+  border-color: var(--input-focus-border-color);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+}
+
+/* ============================
+   modern 主题 — 工具栏按钮渐变修复 & 增强
+   ============================ */
+
+body[data-theme="modern"] .tool-btn.primary {
+  background: var(--button-bg);
+  background-color: transparent;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: none;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+body[data-theme="modern"] .tool-btn.primary:hover {
+  background: var(--button-hover-bg);
+  background-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+body[data-theme="modern"] .tool-btn.primary:active {
+  transform: translateY(0);
+}
+
+body[data-theme="modern"] .tool-btn.secondary {
+  background: var(--button-secondary-bg);
+  background-color: transparent;
+  border: var(--button-secondary-border);
+  color: var(--font-color-secondary);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+body[data-theme="modern"] .tool-btn.secondary:hover {
+  background: var(--button-secondary-hover-bg);
+  background-color: transparent;
+  color: var(--font-color-primary);
+}
+
+/* 修复 GroupedForm 提交按钮渐变 */
+body[data-theme="modern"] .submit-button:last-child {
+  background: var(--button-bg);
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+}
+
+body[data-theme="modern"] .submit-button:last-child:hover {
+  background: var(--button-hover-bg);
+  background-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* 非最后按钮（丢弃/取消）使用次要样式 */
+body[data-theme="modern"] .submit-button:not(:last-child) {
+  background: var(--button-secondary-bg);
+  background-color: transparent;
+  color: var(--font-color-secondary);
+  border: var(--button-secondary-border);
+}
+
+body[data-theme="modern"] .submit-button:not(:last-child):hover {
+  background: var(--button-secondary-hover-bg);
+  background-color: transparent;
+  color: var(--font-color-primary);
+}
+
+/* 修复 Settings actions 按钮渐变 */
+body[data-theme="modern"] .actions button {
+  background: var(--button-bg);
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+}
+
+body[data-theme="modern"] .actions button:hover {
+  background: var(--button-hover-bg);
+  background-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ============================
+   modern 主题 — 状态徽章发光效果
+   ============================ */
+
+body[data-theme="modern"] .status-badge[data-status="online"] {
+  background-color: var(--status-online-bg);
+  color: var(--status-online-color);
+  border: var(--status-online-border);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+body[data-theme="modern"] .status-badge[data-status="offline"] {
+  background-color: var(--status-offline-bg);
+  color: var(--status-offline-color);
+  border: var(--status-offline-border);
+}
+
+body[data-theme="modern"] .status-badge[data-status="unknown"] {
+  background-color: var(--status-unknown-bg);
+  color: var(--status-unknown-color);
+  border: var(--status-unknown-border);
+}
+
+/* ============================
+   modern 主题 — 类型/标签徽章
+   ============================ */
+
+body[data-theme="modern"] .type-badge {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+}
+
+body[data-theme="modern"] .tag-badge {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+/* ============================
+   modern 主题 — 表格行选中
+   ============================ */
+
+body[data-theme="modern"] .data-table tbody tr.selected {
+  background-color: var(--selected-row-bg) !important;
+  box-shadow: inset 3px 0 0 var(--selected-row-border);
+}
+
+/* ============================
+   modern 主题 — 搜索栏毛玻璃
+   ============================ */
+
+body[data-theme="modern"] .toolbar-search {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+body[data-theme="modern"] .toolbar-search:focus-within {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+
+/* ============================
+   modern 主题 — 图标按钮
+   ============================ */
+
+body[data-theme="modern"] .icon-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+}
+
+body[data-theme="modern"] .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: scale(1.07);
+}
+
+/* ============================
+   modern 主题 — 模态框增强
+   ============================ */
+
+body[data-theme="modern"] .modal-container {
+  background: rgba(10, 14, 28, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(32px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+body[data-theme="modern"] .modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+body[data-theme="modern"] .modal-header h2 {
+  background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body[data-theme="modern"] .modal-close {
+  border-radius: 8px;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+body[data-theme="modern"] .modal-close:hover {
+  transform: rotate(90deg);
+}
+
+/* ============================
+   modern 主题 — 空状态页面
+   ============================ */
+
+body[data-theme="modern"] .empty-state {
+  background: var(--card-bg) !important;
+  border: var(--card-border) !important;
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+}
+
+body[data-theme="modern"] .empty-state svg {
+  stroke: rgba(99, 102, 241, 0.4);
+  filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.25));
+}
+
+/* ============================
+   modern 主题 — 通知弹窗
+   ============================ */
+
+body[data-theme="modern"] .popup[color="red"] {
+  background-color: rgba(255, 59, 59, 0.15) !important;
+  border: 1px solid rgba(255, 123, 123, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+body[data-theme="modern"] .popup[color="green"] {
+  background-color: rgba(74, 222, 128, 0.12) !important;
+  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+body[data-theme="modern"] .popup[color="yellow"] {
+  background-color: rgba(250, 204, 21, 0.12) !important;
+  border: 1px solid rgba(250, 204, 21, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+body[data-theme="modern"] .popup[color="blue"] {
+  background-color: rgba(56, 189, 248, 0.12) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+body[data-theme="modern"] .popup[color="red"] .popup-title,
+body[data-theme="modern"] .popup[color="red"] .popup-message {
+  color: #ff7b7b !important;
+}
+
+body[data-theme="modern"] .popup[color="green"] .popup-title,
+body[data-theme="modern"] .popup[color="green"] .popup-message {
+  color: #4ade80 !important;
+}
+
+body[data-theme="modern"] .popup[color="yellow"] .popup-title,
+body[data-theme="modern"] .popup[color="yellow"] .popup-message {
+  color: #facc15 !important;
+}
+
+body[data-theme="modern"] .popup[color="blue"] .popup-title,
+body[data-theme="modern"] .popup[color="blue"] .popup-message {
+  color: #38bdf8 !important;
+}
+
+body[data-theme="modern"] .popup[color="red"] svg,
+body[data-theme="modern"] .popup[color="green"] svg,
+body[data-theme="modern"] .popup[color="yellow"] svg,
+body[data-theme="modern"] .popup[color="blue"] svg {
+  stroke: currentColor !important;
+}
+
+/* ============================
+   modern 主题 — 右键菜单
+   ============================ */
+
+body[data-theme="modern"] .click-menu {
+  background: rgba(12, 17, 32, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* ==================================================
+   pro 主题增强（专业面板 - 浅色）
+   ================================================== */
+
+body[data-theme="pro"] .status-badge[data-status="online"] {
+  background-color: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+body[data-theme="pro"] .status-badge[data-status="offline"] {
+  background-color: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+}
+body[data-theme="pro"] .status-badge[data-status="unknown"] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+body[data-theme="pro"] .type-badge {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+body[data-theme="pro"] .tag-badge {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+body[data-theme="pro"] .data-table tbody tr.selected {
+  background-color: #f0f9ff !important;
+  box-shadow: inset 3px 0 0 #111111;
+}
+body[data-theme="pro"] .toolbar-search:focus-within {
+  border-color: #111111;
+  box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.1);
+}
+body[data-theme="pro"] .modal-container {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: none !important;
+}
+body[data-theme="pro"] .modal-header {
+  border-bottom: 1px solid #e5e7eb !important;
+}
+body[data-theme="pro"] .icon-btn:hover {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+}
+body[data-theme="pro"] .popup[color="red"] {
+  background-color: #fef2f2 !important;
+  border: 1px solid #fca5a5 !important;
+}
+body[data-theme="pro"] .popup[color="green"] {
+  background-color: #f0fdf4 !important;
+  border: 1px solid #86efac !important;
+}
+body[data-theme="pro"] .popup[color="yellow"] {
+  background-color: #fefce8 !important;
+  border: 1px solid #fde047 !important;
+}
+body[data-theme="pro"] .popup[color="blue"] {
+  background-color: #eff6ff !important;
+  border: 1px solid #93c5fd !important;
+}
+body[data-theme="pro"] .popup[color="red"] .popup-title,
+body[data-theme="pro"] .popup[color="red"] .popup-message { color: #991b1b !important; }
+body[data-theme="pro"] .popup[color="green"] .popup-title,
+body[data-theme="pro"] .popup[color="green"] .popup-message { color: #166534 !important; }
+body[data-theme="pro"] .popup[color="yellow"] .popup-title,
+body[data-theme="pro"] .popup[color="yellow"] .popup-message { color: #713f12 !important; }
+body[data-theme="pro"] .popup[color="blue"] .popup-title,
+body[data-theme="pro"] .popup[color="blue"] .popup-message { color: #1e40af !important; }
+body[data-theme="pro"] .popup svg { stroke: currentColor !important; }
+body[data-theme="pro"] .click-menu {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+body[data-theme="pro"] .tool-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(17, 17, 17, 0.25);
+}
+body[data-theme="pro"] .tool-btn.primary:active { transform: translateY(0); }
+
+/* ==================================================
+   terminal 主题增强（命令终端 - 暗绿）
+   ================================================== */
+
+body[data-theme="terminal"] .status-badge[data-status="online"] {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+}
+body[data-theme="terminal"] .status-badge[data-status="offline"] {
+  background-color: rgba(255, 174, 155, 0.1);
+  color: #ffae9b;
+  border: 1px solid rgba(255, 174, 155, 0.35);
+}
+body[data-theme="terminal"] .status-badge[data-status="unknown"] {
+  background-color: rgba(34, 197, 94, 0.05);
+  color: #5b8c65;
+  border: 1px solid rgba(34, 197, 94, 0.15);
+}
+body[data-theme="terminal"] .type-badge {
+  background: rgba(34, 197, 94, 0.08);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+body[data-theme="terminal"] .tag-badge {
+  background: rgba(34, 197, 94, 0.06);
+  color: #5b8c65;
+  border: 1px solid rgba(34, 197, 94, 0.15);
+}
+body[data-theme="terminal"] .data-table tbody tr.selected {
+  background-color: rgba(34, 197, 94, 0.08) !important;
+  box-shadow: inset 3px 0 0 #22c55e;
+}
+body[data-theme="terminal"] .toolbar-search:focus-within {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
+}
+body[data-theme="terminal"] .modal-container {
+  background: #050a06 !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.1), 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: none !important;
+}
+body[data-theme="terminal"] .modal-header {
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2) !important;
+}
+body[data-theme="terminal"] .icon-btn:hover {
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+body[data-theme="terminal"] .popup[color="red"] {
+  background-color: rgba(255, 174, 155, 0.1) !important;
+  border: 1px solid rgba(255, 174, 155, 0.3) !important;
+}
+body[data-theme="terminal"] .popup[color="green"] {
+  background-color: rgba(34, 197, 94, 0.1) !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+body[data-theme="terminal"] .popup[color="yellow"] {
+  background-color: rgba(239, 208, 87, 0.1) !important;
+  border: 1px solid rgba(239, 208, 87, 0.3) !important;
+}
+body[data-theme="terminal"] .popup[color="blue"] {
+  background-color: rgba(40, 235, 255, 0.08) !important;
+  border: 1px solid rgba(40, 235, 255, 0.25) !important;
+}
+body[data-theme="terminal"] .popup[color="red"] .popup-title,
+body[data-theme="terminal"] .popup[color="red"] .popup-message { color: #ffae9b !important; }
+body[data-theme="terminal"] .popup[color="green"] .popup-title,
+body[data-theme="terminal"] .popup[color="green"] .popup-message { color: #22c55e !important; }
+body[data-theme="terminal"] .popup[color="yellow"] .popup-title,
+body[data-theme="terminal"] .popup[color="yellow"] .popup-message { color: #efd057 !important; }
+body[data-theme="terminal"] .popup[color="blue"] .popup-title,
+body[data-theme="terminal"] .popup[color="blue"] .popup-message { color: #28ebff !important; }
+body[data-theme="terminal"] .popup svg { stroke: currentColor !important; }
+body[data-theme="terminal"] .click-menu {
+  background: #0b140d !important;
+  border: 1px solid rgba(34, 197, 94, 0.25) !important;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.1), 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+body[data-theme="terminal"] .tool-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+}
+body[data-theme="terminal"] .tool-btn.primary:active { transform: translateY(0); }
+
+/* ==================================================
+   glass 主题增强（极光玻璃 - 毛玻璃深色）
+   ================================================== */
+
+body[data-theme="glass"] .status-badge[data-status="unknown"] {
+  background-color: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+body[data-theme="glass"] .type-badge {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+}
+body[data-theme="glass"] .tag-badge {
+  background: rgba(34, 211, 238, 0.08);
+  color: #67e8f9;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+body[data-theme="glass"] .data-table tbody tr.selected {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  box-shadow: inset 3px 0 0 #22d3ee;
+}
+body[data-theme="glass"] .toolbar-search {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+body[data-theme="glass"] .toolbar-search:focus-within {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.12);
+}
+body[data-theme="glass"] .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+body[data-theme="glass"] .popup[color="red"] {
+  background-color: rgba(255, 59, 59, 0.15) !important;
+  border: 1px solid rgba(255, 123, 123, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="glass"] .popup[color="green"] {
+  background-color: rgba(74, 222, 128, 0.12) !important;
+  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="glass"] .popup[color="yellow"] {
+  background-color: rgba(250, 204, 21, 0.12) !important;
+  border: 1px solid rgba(250, 204, 21, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="glass"] .popup[color="blue"] {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  border: 1px solid rgba(34, 211, 238, 0.3) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="glass"] .popup[color="red"] .popup-title,
+body[data-theme="glass"] .popup[color="red"] .popup-message { color: #ff7b7b !important; }
+body[data-theme="glass"] .popup[color="green"] .popup-title,
+body[data-theme="glass"] .popup[color="green"] .popup-message { color: #4ade80 !important; }
+body[data-theme="glass"] .popup[color="yellow"] .popup-title,
+body[data-theme="glass"] .popup[color="yellow"] .popup-message { color: #facc15 !important; }
+body[data-theme="glass"] .popup[color="blue"] .popup-title,
+body[data-theme="glass"] .popup[color="blue"] .popup-message { color: #22d3ee !important; }
+body[data-theme="glass"] .popup svg { stroke: currentColor !important; }
+body[data-theme="glass"] .click-menu {
+  background: rgba(10, 18, 40, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+}
+body[data-theme="glass"] .tool-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(34, 211, 238, 0.35);
+}
+body[data-theme="glass"] .tool-btn.primary:active { transform: translateY(0); }
+
+/* ==================================================
+   cyber 主题增强（赛博霓虹 - 氰光）
+   ================================================== */
+
+body[data-theme="cyber"] .status-badge[data-status="online"] {
+  background-color: rgba(0, 240, 255, 0.08);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+}
+body[data-theme="cyber"] .status-badge[data-status="offline"] {
+  background-color: rgba(255, 174, 155, 0.08);
+  color: #ffae9b;
+  border: 1px solid rgba(255, 174, 155, 0.3);
+}
+body[data-theme="cyber"] .status-badge[data-status="unknown"] {
+  background-color: rgba(90, 115, 140, 0.15);
+  color: #5a738c;
+  border: 1px solid rgba(90, 115, 140, 0.3);
+}
+body[data-theme="cyber"] .type-badge {
+  background: rgba(0, 240, 255, 0.07);
+  color: #00f0ff;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+body[data-theme="cyber"] .tag-badge {
+  background: rgba(0, 240, 255, 0.05);
+  color: #67f9ff;
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+body[data-theme="cyber"] .data-table tbody tr.selected {
+  background-color: rgba(0, 240, 255, 0.07) !important;
+  box-shadow: inset 3px 0 0 #00f0ff;
+}
+body[data-theme="cyber"] .toolbar-search:focus-within {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.1);
+}
+body[data-theme="cyber"] .modal-container {
+  background: #05070a !important;
+  border: 1px solid rgba(0, 240, 255, 0.25) !important;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.08), 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: none !important;
+}
+body[data-theme="cyber"] .modal-header {
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15) !important;
+}
+body[data-theme="cyber"] .icon-btn:hover {
+  background-color: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+}
+body[data-theme="cyber"] .popup[color="red"] {
+  background-color: rgba(255, 59, 59, 0.1) !important;
+  border: 1px solid rgba(255, 174, 155, 0.4) !important;
+}
+body[data-theme="cyber"] .popup[color="green"] {
+  background-color: rgba(0, 240, 255, 0.08) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+body[data-theme="cyber"] .popup[color="yellow"] {
+  background-color: rgba(239, 208, 87, 0.08) !important;
+  border: 1px solid rgba(239, 208, 87, 0.3) !important;
+}
+body[data-theme="cyber"] .popup[color="blue"] {
+  background-color: rgba(0, 240, 255, 0.08) !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+body[data-theme="cyber"] .popup[color="red"] .popup-title,
+body[data-theme="cyber"] .popup[color="red"] .popup-message { color: #ffae9b !important; }
+body[data-theme="cyber"] .popup[color="green"] .popup-title,
+body[data-theme="cyber"] .popup[color="green"] .popup-message { color: #00f0ff !important; }
+body[data-theme="cyber"] .popup[color="yellow"] .popup-title,
+body[data-theme="cyber"] .popup[color="yellow"] .popup-message { color: #efd057 !important; }
+body[data-theme="cyber"] .popup[color="blue"] .popup-title,
+body[data-theme="cyber"] .popup[color="blue"] .popup-message { color: #00f0ff !important; }
+body[data-theme="cyber"] .popup svg { stroke: currentColor !important; }
+body[data-theme="cyber"] .click-menu {
+  background: #0a0f16 !important;
+  border: 1px solid rgba(0, 240, 255, 0.2) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+body[data-theme="cyber"] .tool-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 240, 255, 0.35);
+}
+body[data-theme="cyber"] .tool-btn.primary:active { transform: translateY(0); }
+
+/* ==================================================
+   paper 主题增强（粉彩玻璃 - 渐变毛玻璃）
+   ================================================== */
+
+body[data-theme="paper"] .status-badge[data-status="online"] {
+  background-color: rgba(134, 239, 172, 0.2);
+  color: #15803d;
+  border: 1px solid rgba(134, 239, 172, 0.4);
+}
+body[data-theme="paper"] .status-badge[data-status="offline"] {
+  background-color: rgba(252, 165, 165, 0.2);
+  color: #b91c1c;
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}
+body[data-theme="paper"] .status-badge[data-status="unknown"] {
+  background-color: rgba(237, 231, 246, 0.6);
+  color: #9c6aad;
+  border: 1px solid rgba(200, 160, 230, 0.35);
+}
+body[data-theme="paper"] .type-badge {
+  background: rgba(124, 77, 255, 0.1);
+  color: #7c4dff;
+  border: 1px solid rgba(124, 77, 255, 0.25);
+}
+body[data-theme="paper"] .tag-badge {
+  background: rgba(236, 64, 122, 0.08);
+  color: #ec407a;
+  border: 1px solid rgba(236, 64, 122, 0.2);
+}
+body[data-theme="paper"] .data-table tbody tr.selected {
+  background-color: rgba(236, 64, 122, 0.07) !important;
+  box-shadow: inset 3px 0 0 #ec407a;
+}
+body[data-theme="paper"] .toolbar-search:focus-within {
+  border-color: rgba(236, 64, 122, 0.5);
+  box-shadow: 0 0 0 3px rgba(236, 64, 122, 0.12);
+}
+body[data-theme="paper"] .modal-container {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(28px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%) !important;
+  box-shadow: 0 20px 60px rgba(150, 80, 200, 0.15), 0 4px 16px rgba(236, 64, 122, 0.08) !important;
+}
+body[data-theme="paper"] .modal-header {
+  border-bottom: 1px solid rgba(200, 160, 230, 0.3) !important;
+}
+body[data-theme="paper"] .icon-btn:hover {
+  background: rgba(237, 231, 246, 0.8);
+  border: 1px solid rgba(200, 160, 230, 0.4);
+}
+body[data-theme="paper"] .popup[color="red"] {
+  background-color: rgba(255, 228, 236, 0.85) !important;
+  border: 1px solid rgba(236, 64, 122, 0.3) !important;
+  backdrop-filter: blur(16px) !important;
+}
+body[data-theme="paper"] .popup[color="green"] {
+  background-color: rgba(220, 252, 231, 0.85) !important;
+  border: 1px solid rgba(74, 222, 128, 0.3) !important;
+  backdrop-filter: blur(16px) !important;
+}
+body[data-theme="paper"] .popup[color="yellow"] {
+  background-color: rgba(255, 249, 219, 0.85) !important;
+  border: 1px solid rgba(250, 204, 21, 0.3) !important;
+  backdrop-filter: blur(16px) !important;
+}
+body[data-theme="paper"] .popup[color="blue"] {
+  background-color: rgba(224, 242, 254, 0.85) !important;
+  border: 1px solid rgba(124, 77, 255, 0.3) !important;
+  backdrop-filter: blur(16px) !important;
+}
+body[data-theme="paper"] .popup[color="red"] .popup-title,
+body[data-theme="paper"] .popup[color="red"] .popup-message { color: #be185d !important; }
+body[data-theme="paper"] .popup[color="green"] .popup-title,
+body[data-theme="paper"] .popup[color="green"] .popup-message { color: #15803d !important; }
+body[data-theme="paper"] .popup[color="yellow"] .popup-title,
+body[data-theme="paper"] .popup[color="yellow"] .popup-message { color: #92400e !important; }
+body[data-theme="paper"] .popup[color="blue"] .popup-title,
+body[data-theme="paper"] .popup[color="blue"] .popup-message { color: #5b21b6 !important; }
+body[data-theme="paper"] .popup svg { stroke: currentColor !important; }
+body[data-theme="paper"] .click-menu {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 30px rgba(150, 80, 200, 0.12) !important;
+}
+body[data-theme="paper"] .tool-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(236, 64, 122, 0.35);
+}
+body[data-theme="paper"] .tool-btn.primary:active { transform: translateY(0); }
+
+/* paper 主题 — 修复 background-color 无法接受渐变导致按钮透明的问题 */
+body[data-theme="paper"] .button {
+  background: var(--button-bg);
+  color: var(--button-color);
+  border: none;
+}
+body[data-theme="paper"] .button:hover:not(:disabled) {
+  background: var(--button-hover-bg);
+}
+body[data-theme="paper"] .button.button-secondary {
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-color);
+  border: var(--button-secondary-border);
+}
+body[data-theme="paper"] .button.button-secondary:hover:not(:disabled) {
+  background: var(--button-secondary-hover-bg);
+}
+
+/* ==================================================
+   select / select option 深色主题修复（避免白底白字）
+   ================================================== */
+
+body[data-theme="modern"] select,
+body[data-theme="glass"] select,
+body[data-theme="terminal"] select,
+body[data-theme="cyber"] select,
+body[data-theme="nova"] select {
+  background-color: var(--input-bg);
+  color: var(--font-color-primary);
+}
+
+body[data-theme="modern"] select option,
+body[data-theme="modern"] select optgroup {
+  background: #0b0f19 !important;
+  color: #f1f5f9 !important;
+}
+body[data-theme="glass"] select option,
+body[data-theme="glass"] select optgroup {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+body[data-theme="terminal"] select option,
+body[data-theme="terminal"] select optgroup {
+  background: #050a06 !important;
+  color: #d1f7d9 !important;
+}
+body[data-theme="cyber"] select option,
+body[data-theme="cyber"] select optgroup {
+  background: #05070a !important;
+  color: #e0f7ff !important;
+}
+body[data-theme="nova"] select option,
+body[data-theme="nova"] select optgroup {
+  background: #f8f7ff !important;
+  color: #000000 !important;
+}
+
+/* ==================================================
+   BasicInfoMain — 美化表格卡片
+   ================================================== */
+
+body[data-theme="modern"] .infos,
+body[data-theme="glass"] .infos,
+body[data-theme="cyber"] .infos,
+body[data-theme="terminal"] .infos,
+body[data-theme="paper"] .infos {
+  background: var(--card-bg) !important;
+  border: var(--card-border) !important;
+  backdrop-filter: var(--card-backdrop) !important;
+  -webkit-backdrop-filter: var(--card-backdrop) !important;
+  border-radius: var(--card-radius) !important;
+}
+
+/* ==================================================
+   ShellCommandMain — icon-run 按钮在 modern 主题
+   ================================================== */
+
+body[data-theme="modern"] .icon-run:hover {
+  background: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%) !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+body[data-theme="cyber"] .icon-run:hover {
+  background: #00f0ff !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+}
+
+body[data-theme="terminal"] .icon-run:hover {
+  background: #22c55e !important;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.3);
+}
+
+/* ==================================================
+   ConnectorMain — modern 主题额外发光增强
+   ================================================== */
+
+body[data-theme="modern"] .status-badge[data-status="on"],
+body[data-theme="glass"] .status-badge[data-status="on"],
+body[data-theme="cyber"] .status-badge[data-status="on"],
+body[data-theme="terminal"] .status-badge[data-status="on"] {
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+}
+
+body[data-theme="cyber"] .status-badge[data-status="on"] {
+  background-color: rgba(0, 240, 255, 0.1) !important;
+  color: #00f0ff !important;
+  border-color: rgba(0, 240, 255, 0.3) !important;
+}
+
+body[data-theme="terminal"] .status-badge[data-status="on"] {
+  background-color: rgba(34, 197, 94, 0.1) !important;
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+/* ==================================================
+   全局 — pro/paper 主题 .status-ok/.status-fail 改善
+   ================================================== */
+
+body[data-theme="pro"] .status-ok {
+  background-color: rgba(22, 163, 74, 0.1) !important;
+  color: #166534 !important;
+  border: 1px solid rgba(22, 163, 74, 0.3) !important;
+}
+body[data-theme="pro"] .status-fail {
+  background-color: rgba(220, 38, 38, 0.08) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(220, 38, 38, 0.25) !important;
+}
+body[data-theme="paper"] .status-ok {
+  background-color: rgba(134, 239, 172, 0.2) !important;
+  color: #15803d !important;
+  border: 1px solid rgba(134, 239, 172, 0.4) !important;
+}
+body[data-theme="paper"] .status-fail {
+  background-color: rgba(252, 165, 165, 0.2) !important;
+  color: #b91c1c !important;
+  border: 1px solid rgba(252, 165, 165, 0.4) !important;
+}
+
+/* ============================
+   GLASS 主题全局增强
+   ============================ */
+
+body[data-theme="glass"] header {
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  background: rgba(15, 12, 41, 0.6) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="glass"] .brand-name {
+  background: linear-gradient(135deg, #c084fc 0%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body[data-theme="glass"] .nav-tab {
+  border-radius: 14px;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+body[data-theme="glass"] .nav-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+body[data-theme="glass"] .nav-tab.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.5) 0%, rgba(45, 212, 191, 0.4) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+  color: #fff !important;
+  backdrop-filter: blur(8px);
+}
+
+body[data-theme="glass"] .header-logo {
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+}
+
+body[data-theme="glass"] .user-avatar {
+  background: linear-gradient(135deg, #a855f7 0%, #2dd4bf 100%);
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+}
+
+body[data-theme="glass"] .status-badge[data-status="online"] {
+  background: rgba(74, 222, 128, 0.15);
+  color: #86efac;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.15);
+}
+
+body[data-theme="glass"] .status-badge[data-status="offline"] {
+  background: rgba(248, 113, 113, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+body[data-theme="glass"] .table-card {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 20px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+body[data-theme="glass"] .data-table th {
+  background: rgba(15, 23, 42, 0.5);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="glass"] .data-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body[data-theme="glass"] .data-table tbody tr:hover {
+  background: rgba(168, 85, 247, 0.08);
+}
+
+body[data-theme="glass"] .data-table tbody tr:hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #a855f7 0%, #2dd4bf 100%);
+}
+
+body[data-theme="glass"] .tool-btn.primary {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.7) 0%, rgba(45, 212, 191, 0.6) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+body[data-theme="glass"] .tool-btn.primary:hover {
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.85) 0%, rgba(94, 234, 212, 0.75) 100%) !important;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+  transform: translateY(-1px);
+}
+
+body[data-theme="glass"] .modal-container {
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+body[data-theme="glass"] .modal-header h2 {
+  background: linear-gradient(135deg, #c084fc 0%, #2dd4bf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================
+   CYBER 主题全局增强
+   ============================ */
+
+body[data-theme="cyber"] header {
+  background: rgba(3, 6, 10, 0.97) !important;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.35) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.06), 0 4px 0 rgba(0, 240, 255, 0.12);
+}
+
+body[data-theme="cyber"] .brand-name {
+  background: linear-gradient(90deg, #00f0ff 0%, #ff00d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body[data-theme="cyber"] .header-logo {
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.7));
+}
+
+body[data-theme="cyber"] .nav-tab {
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+body[data-theme="cyber"] .nav-tab:hover {
+  background: rgba(0, 240, 255, 0.06);
+  border-color: rgba(0, 240, 255, 0.25);
+  color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.12);
+}
+
+body[data-theme="cyber"] .nav-tab.active {
+  background: rgba(0, 240, 255, 0.1) !important;
+  border-color: #00f0ff !important;
+  color: #00f0ff !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3), inset 0 0 6px rgba(0, 240, 255, 0.06);
+}
+
+body[data-theme="cyber"] .user-avatar {
+  background: transparent;
+  border: 1px solid #00f0ff;
+  color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+body[data-theme="cyber"] .status-badge[data-status="online"] {
+  background: rgba(0, 240, 100, 0.1);
+  color: #00e87a;
+  border: 1px solid rgba(0, 240, 100, 0.4);
+  box-shadow: 0 0 8px rgba(0, 240, 100, 0.2);
+}
+
+body[data-theme="cyber"] .status-badge[data-status="offline"] {
+  background: rgba(255, 0, 80, 0.1);
+  color: #ff6090;
+  border: 1px solid rgba(255, 0, 80, 0.3);
+}
+
+body[data-theme="cyber"] .table-card {
+  background: #0a0f16 !important;
+  border: 1px solid rgba(0, 240, 255, 0.2) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.06), 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+body[data-theme="cyber"] .data-table th {
+  background: rgba(0, 240, 255, 0.04);
+  color: rgba(0, 240, 255, 0.65);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+body[data-theme="cyber"] .data-table td {
+  border-bottom: 1px solid rgba(0, 240, 255, 0.06);
+}
+
+body[data-theme="cyber"] .data-table tbody tr {
+  position: relative;
+  transition: background 0.15s ease;
+}
+
+body[data-theme="cyber"] .data-table tbody tr:hover {
+  background: rgba(0, 240, 255, 0.04);
+  box-shadow: inset 3px 0 0 #00f0ff;
+}
+
+body[data-theme="cyber"] .tool-btn.primary {
+  background: transparent !important;
+  border: 1px solid #00f0ff !important;
+  color: #00f0ff !important;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.3), inset 0 0 8px rgba(0, 240, 255, 0.05);
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="cyber"] .tool-btn.primary:hover {
+  background: rgba(0, 240, 255, 0.08) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), inset 0 0 12px rgba(0, 240, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+body[data-theme="cyber"] .modal-container {
+  background: #0a0f16 !important;
+  border: 1px solid rgba(0, 240, 255, 0.3) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.1), 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+body[data-theme="cyber"] .modal-header h2 {
+  color: #00f0ff;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+}
+
+body[data-theme="cyber"] .empty-state {
+  border: 1px solid rgba(0, 240, 255, 0.15) !important;
+}
+
+/* ============================
+   TERMINAL 主题全局增强
+   ============================ */
+
+body[data-theme="terminal"] header {
+  background: #020603 !important;
+  border-bottom: 1px solid rgba(34, 197, 94, 0.35) !important;
+  box-shadow: 0 1px 0 rgba(34, 197, 94, 0.15);
+}
+
+body[data-theme="terminal"] .brand-name {
+  color: #22c55e;
+  text-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="terminal"] .header-logo {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
+}
+
+body[data-theme="terminal"] .nav-tab {
+  border-radius: 0;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+body[data-theme="terminal"] .nav-tab:hover {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #22c55e;
+}
+
+body[data-theme="terminal"] .nav-tab.active {
+  background: rgba(34, 197, 94, 0.12) !important;
+  border-color: #22c55e !important;
+  color: #22c55e !important;
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
+}
+
+body[data-theme="terminal"] .user-avatar {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid #22c55e;
+  color: #22c55e;
+}
+
+body[data-theme="terminal"] .status-badge[data-status="online"] {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  text-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+}
+
+body[data-theme="terminal"] .status-badge[data-status="offline"] {
+  background: rgba(220, 38, 38, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+body[data-theme="terminal"] .table-card {
+  background: #0b140d !important;
+  border: 1px solid rgba(34, 197, 94, 0.2) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.08);
+}
+
+body[data-theme="terminal"] .data-table th {
+  background: rgba(34, 197, 94, 0.05);
+  color: rgba(34, 197, 94, 0.7);
+  font-size: 0.75rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+body[data-theme="terminal"] .data-table td {
+  border-bottom: 1px solid rgba(34, 197, 94, 0.08);
+}
+
+body[data-theme="terminal"] .data-table tbody tr:hover {
+  background: rgba(34, 197, 94, 0.06);
+  box-shadow: inset 3px 0 0 #22c55e;
+}
+
+body[data-theme="terminal"] .tool-btn.primary {
+  background: transparent !important;
+  border: 1px solid #22c55e !important;
+  color: #22c55e !important;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.25);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+body[data-theme="terminal"] .tool-btn.primary:hover {
+  background: rgba(34, 197, 94, 0.1) !important;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+  text-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+body[data-theme="terminal"] .modal-container {
+  background: #080f09 !important;
+  border: 1px solid rgba(34, 197, 94, 0.35) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.08), 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+body[data-theme="terminal"] .modal-header h2 {
+  color: #22c55e;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+/* ============================
+   PAPER 主题全局增强
+   ============================ */
+
+body[data-theme="paper"] header {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 4px 24px rgba(150, 80, 200, 0.1);
+}
+
+body[data-theme="paper"] .brand-name {
+  background: linear-gradient(135deg, #ec407a 0%, #7c4dff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+}
+
+body[data-theme="paper"] .nav-tab {
+  border-radius: 14px;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+body[data-theme="paper"] .nav-tab:hover {
+  background: rgba(237, 231, 246, 0.7);
+  color: #7c4dff;
+}
+
+body[data-theme="paper"] .nav-tab.active {
+  background: linear-gradient(135deg, rgba(236, 64, 122, 0.18) 0%, rgba(124, 77, 255, 0.18) 100%) !important;
+  border: 1px solid rgba(200, 150, 255, 0.35);
+  color: #7c4dff !important;
+  box-shadow: 0 4px 16px rgba(124, 77, 255, 0.15);
+}
+
+body[data-theme="paper"] .status-badge[data-status="online"] {
+  background: rgba(134, 239, 172, 0.2);
+  color: #15803d;
+  border: 1px solid rgba(134, 239, 172, 0.4);
+}
+
+body[data-theme="paper"] .status-badge[data-status="offline"] {
+  background: rgba(252, 165, 165, 0.2);
+  color: #b91c1c;
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}
+
+body[data-theme="paper"] .table-card {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 22px !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: 0 4px 24px rgba(150, 80, 200, 0.1);
+}
+
+body[data-theme="paper"] .data-table th {
+  background: rgba(237, 231, 246, 0.55);
+  color: #6b2e8c;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(200, 160, 230, 0.3);
+}
+
+body[data-theme="paper"] .data-table td {
+  border-bottom: 1px solid rgba(200, 160, 230, 0.18);
+}
+
+body[data-theme="paper"] .data-table tbody tr:hover {
+  background: rgba(252, 228, 236, 0.55);
+}
+
+body[data-theme="paper"] .tool-btn.primary {
+  background: linear-gradient(135deg, #ec407a 0%, #7c4dff 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(236, 64, 122, 0.3);
+}
+
+body[data-theme="paper"] .tool-btn.primary:hover {
+  background: linear-gradient(135deg, #f06292 0%, #9575cd 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(236, 64, 122, 0.4);
+}
+
+/* ============================
+   PRO 主题全局增强
+   ============================ */
+
+body[data-theme="pro"] .table-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+body[data-theme="pro"] .data-table th {
+  background: #fafafa;
+  color: #6b7280;
+  font-size: 0.73rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+body[data-theme="pro"] .data-table td {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+body[data-theme="pro"] .data-table tbody tr {
+  position: relative;
+  transition: background 0.15s ease;
+}
+
+body[data-theme="pro"] .data-table tbody tr:hover {
+  background: #f9fafb;
+  box-shadow: inset 3px 0 0 #111111;
+}
+
+body[data-theme="pro"] .status-badge[data-status="online"] {
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+body[data-theme="pro"] .status-badge[data-status="offline"] {
+  background: rgba(239, 68, 68, 0.08);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+body[data-theme="pro"] .modal-container {
+  border-radius: 16px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ==================================================
+   nova 主题 — 极光幻境
+   ================================================== */
+
+body[data-theme="nova"] main {
+  background-color: transparent;
+}
+
+/* Header */
+body[data-theme="nova"] header {
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  background: rgba(3,7,18,0.68) !important;
+  border-bottom: 1px solid rgba(167,139,250,0.2) !important;
+  box-shadow: 0 4px 30px rgba(109,40,217,0.18);
+}
+
+body[data-theme="nova"] .brand-name {
+  background: linear-gradient(135deg, #c4b5fd 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body[data-theme="nova"] .header-logo {
+  filter: drop-shadow(0 0 10px rgba(167,139,250,0.6));
+}
+
+body[data-theme="nova"] .nav-tab {
+  border-radius: 999px;
+  padding: 0 18px;
+  height: 38px;
+  font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+body[data-theme="nova"] .nav-tab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(59,130,246,0.18));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: -1;
+}
+
+body[data-theme="nova"] .nav-tab:hover::before {
+  opacity: 1;
+}
+
+body[data-theme="nova"] .nav-tab.active {
+  background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.45);
+}
+
+body[data-theme="nova"] .status-item {
+  background: rgba(167,139,250,0.08);
+  border: 1px solid rgba(167,139,250,0.15);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+body[data-theme="nova"] .user-avatar {
+  background: linear-gradient(135deg, #7c3aed 0%, #3b82f6 100%);
+  box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+}
+
+body[data-theme="nova"] .user-dropdown {
+  background: rgba(10,5,30,0.92) !important;
+  border: 1px solid rgba(167,139,250,0.25) !important;
+  box-shadow: 0 16px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) !important;
+}
+
+/* Cards & modals */
+body[data-theme="nova"] .modal-container {
+  background: rgba(14,8,40,0.88) !important;
+  border: 1px solid rgba(167,139,250,0.22) !important;
+  backdrop-filter: blur(28px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+  box-shadow: 0 24px 60px rgba(109,40,217,0.35) !important;
+}
+
+body[data-theme="nova"] .modal-header {
+  border-bottom: 1px solid rgba(167,139,250,0.15) !important;
+}
+
+/* Status badges */
+body[data-theme="nova"] .status-badge[data-status="online"] {
+  background-color: rgba(52,211,153,0.12);
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.35);
+}
+body[data-theme="nova"] .status-badge[data-status="offline"] {
+  background-color: rgba(248,113,113,0.12);
+  color: #f87171;
+  border: 1px solid rgba(248,113,113,0.35);
+}
+body[data-theme="nova"] .status-badge[data-status="unknown"] {
+  background-color: rgba(167,139,250,0.08);
+  color: #c4b5fd;
+  border: 1px solid rgba(167,139,250,0.2);
+}
+
+body[data-theme="nova"] .type-badge {
+  background-color: rgba(59,130,246,0.12);
+  color: #93c5fd;
+  border: 1px solid rgba(59,130,246,0.3);
+}
+body[data-theme="nova"] .tag-badge {
+  background-color: rgba(167,139,250,0.12);
+  color: #c4b5fd;
+  border: 1px solid rgba(167,139,250,0.28);
+}
+
+body[data-theme="nova"] .data-table tbody tr.selected {
+  background-color: rgba(124,58,237,0.12) !important;
+  box-shadow: inset 3px 0 0 #a78bfa;
+}
+
+body[data-theme="nova"] .toolbar-search:focus-within {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.18);
+}
+
+body[data-theme="nova"] .click-menu {
+  background: rgba(10,5,30,0.92) !important;
+  border: 1px solid rgba(167,139,250,0.22) !important;
+  backdrop-filter: blur(24px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(167,139,250,0.08) !important;
+}
+
+body[data-theme="nova"] .empty-state {
+  background: var(--card-bg) !important;
+  border: var(--card-border) !important;
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+}
+
+body[data-theme="nova"] .empty-state svg {
+  stroke: rgba(167,139,250,0.4);
+  filter: drop-shadow(0 0 12px rgba(124,58,237,0.3));
+}
+
+/* Popups */
+body[data-theme="nova"] .popup[color="red"] {
+  background-color: rgba(248,113,113,0.13) !important;
+  border: 1px solid rgba(248,113,113,0.32) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="nova"] .popup[color="green"] {
+  background-color: rgba(52,211,153,0.12) !important;
+  border: 1px solid rgba(52,211,153,0.32) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="nova"] .popup[color="yellow"] {
+  background-color: rgba(251,191,36,0.12) !important;
+  border: 1px solid rgba(251,191,36,0.32) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="nova"] .popup[color="blue"] {
+  background-color: rgba(96,165,250,0.12) !important;
+  border: 1px solid rgba(96,165,250,0.32) !important;
+  backdrop-filter: blur(20px) !important;
+}
+body[data-theme="nova"] .popup[color="red"] .popup-title,
+body[data-theme="nova"] .popup[color="red"] .popup-message { color: #f87171 !important; }
+body[data-theme="nova"] .popup[color="green"] .popup-title,
+body[data-theme="nova"] .popup[color="green"] .popup-message { color: #34d399 !important; }
+body[data-theme="nova"] .popup[color="yellow"] .popup-title,
+body[data-theme="nova"] .popup[color="yellow"] .popup-message { color: #fbbf24 !important; }
+body[data-theme="nova"] .popup[color="blue"] .popup-title,
+body[data-theme="nova"] .popup[color="blue"] .popup-message { color: #60a5fa !important; }
+body[data-theme="nova"] .popup[color="red"] svg,
+body[data-theme="nova"] .popup[color="green"] svg,
+body[data-theme="nova"] .popup[color="yellow"] svg,
+body[data-theme="nova"] .popup[color="blue"] svg {
+  stroke: currentColor !important;
+}
