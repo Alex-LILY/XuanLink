@@ -2,7 +2,7 @@
 
 import { addPopup, getCurrentApiUrl, getDataOrPopupError, parseDataOrPopupError, postDataOrPopupError } from "@/assets/utils";
 import { reactive, ref, watch, computed } from "vue";
-import { t } from "@/i18n"
+import { t, sessionTypeName } from "@/i18n"
 import iconCross from "@/components/icons/iconCross.vue";
 import { store } from "@/assets/store";
 import axios from "axios";
@@ -153,7 +153,7 @@ setTimeout(() => {
       </select>
       <select name="session" id="" v-model="addProxyInput.session_id">
         <option :value="''">{{ t.proxies.sessionPh }}</option>
-        <option v-for="session in phpSessions" :value="session.id">{{ session.readable_type }} - {{ session.name }}</option>
+        <option v-for="session in phpSessions" :value="session.id">{{ sessionTypeName(session.type, session.readable_type) }} - {{ session.name }}</option>
       </select>
       <input type="text" name="listen_host" id="" :placeholder="t.proxies.hostPh" v-model="addProxyInput.listen_host"
         :data-valid="addProxyInputValid.listen_host">

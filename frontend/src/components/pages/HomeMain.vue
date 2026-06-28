@@ -25,7 +25,7 @@ import sanitizeHtml from "sanitize-html";
 
 import { getCurrentApiUrl } from "@/assets/utils";
 import { store } from "@/assets/store";
-import { t } from "@/i18n"
+import { t, sessionTypeName } from "@/i18n"
 
 const sessions = ref([])
 const currentPage = ref(1)
@@ -385,7 +385,7 @@ function openEditModal(session) {
               <span v-else>-</span>
             </td>
             <td>
-              <span class="type-badge" :data-type="session.type">{{ session.readable_type }}</span>
+              <span class="type-badge" :data-type="session.type">{{ sessionTypeName(session.type, session.readable_type) }}</span>
             </td>
             <td class="mono url-cell">{{ session.url }}</td>
             <td>{{ session.os }}</td>

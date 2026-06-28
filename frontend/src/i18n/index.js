@@ -11,3 +11,7 @@ export function setLang(l) {
   lang.value = l
   localStorage.setItem('xulink_lang', l)
 }
+
+export function sessionTypeName(id, fallback) {
+  return t.value.sessionTypes?.[id] || fallback || id
+}

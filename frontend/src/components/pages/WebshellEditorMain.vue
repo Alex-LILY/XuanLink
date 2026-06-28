@@ -4,7 +4,7 @@ import { getDataOrPopupError, postDataOrPopupError, addPopup, doAssert } from "@
 import GroupedForm from "@/components/GroupedForm.vue"
 import { store } from "@/assets/store";
 import { useRouter } from "vue-router"
-import { t } from "@/i18n"
+import { t, sessionTypeName } from "@/i18n"
 
 const proxyAlternatives = ref([])
 
@@ -103,7 +103,7 @@ async function fetchSupportedSessionTypes() {
   let optionIdx = basicOptionGroup.options.findIndex(option => option.id == 'session_type')
   basicOptionGroup.options[optionIdx].alternatives = sessionTypes.map(sessionType => {
     return {
-      name: sessionType.name,
+      name: sessionTypeName(sessionType.id, sessionType.name),
       value: sessionType.id
     }
   })
