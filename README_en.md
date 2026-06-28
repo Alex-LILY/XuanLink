@@ -72,6 +72,8 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 - File management: directory browsing, file read/write, upload, download
 - PHP code execution and `phpinfo` download
 - TCP forward proxy and pseudo-forward proxy (gopher/SSRF)
+- HTTP / SOCKS5 forward proxy (via Vessel)
+- HTTP / SOCKS5 outbound proxy pool: manage, speed-test, and switch proxies
 - AntSword integration to leverage part of its plugin ecosystem
 - Reverse shell listener with persistent connections
 
@@ -133,6 +135,9 @@ poetry run ether_ghost
 ```
 
 Open `http://127.0.0.1:8022` in your browser.
+
+> **Default credentials**: `admin` / `admin123`  
+> You will be required to change the default password on first login.
 
 ### Common Options
 
@@ -312,6 +317,8 @@ XuanLink/
 | File R/W | ✓ | ✓ | ✓ | ✓ | ✓ |
 | PHP eval | ✓ | - | - | - | - |
 | TCP forward | ✓ | - | - | - | - |
+| HTTP forward | ✓ | - | - | - | - |
+| SOCKS5 forward | ✓ | - | - | - | - |
 
 ---
 
