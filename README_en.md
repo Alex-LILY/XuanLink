@@ -1,7 +1,7 @@
 # XuanLink
 
 <p align="center">
-  <img src="./assets/preview-files.png" alt="XuanLink Main Interface" width="80%">
+  <img src="./assets/主界面.png" alt="XuanLink Main Interface" width="80%">
 </p>
 
 <p align="center">
@@ -88,17 +88,17 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 
 <p align="center">
   <b>Main Interface</b><br>
-  <img src="./assets/preview-files.png" alt="Main Interface" width="90%">
+  <img src="./assets/主界面.png" alt="Main Interface" width="90%">
 </p>
 
 <p align="center">
-  <b>Settings</b><br>
-  <img src="./assets/preview-homepage.png" alt="Settings" width="90%">
+  <b>File Management</b><br>
+  <img src="./assets/文件管理.png" alt="File Management" width="90%">
 </p>
 
 <p align="center">
-  <b>Proxy List</b><br>
-  <img src="./assets/preview-terminal.png" alt="Proxy List" width="90%">
+  <b>Login Interface</b><br>
+  <img src="./assets/登录界面.png" alt="Login Interface" width="90%">
 </p>
 
 ---

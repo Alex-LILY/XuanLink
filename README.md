@@ -1,7 +1,7 @@
 # XuanLink（玄联）
 
 <p align="center">
-  <img src="./assets/preview-files.png" alt="XuanLink 主界面" width="80%">
+  <img src="./assets/主界面.png" alt="XuanLink 主界面" width="80%">
 </p>
 
 <p align="center">
@@ -88,17 +88,17 @@
 
 <p align="center">
   <b>主界面</b><br>
-  <img src="./assets/preview-files.png" alt="主界面" width="90%">
+  <img src="./assets/主界面.png" alt="主界面" width="90%">
 </p>
 
 <p align="center">
-  <b>系统设置</b><br>
-  <img src="./assets/preview-homepage.png" alt="系统设置" width="90%">
+  <b>文件管理</b><br>
+  <img src="./assets/文件管理.png" alt="文件管理" width="90%">
 </p>
 
 <p align="center">
-  <b>代理列表</b><br>
-  <img src="./assets/preview-terminal.png" alt="代理列表" width="90%">
+  <b>登录界面</b><br>
+  <img src="./assets/登录界面.png" alt="登录界面" width="90%">
 </p>
 
 ---
