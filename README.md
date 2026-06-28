@@ -1,4 +1,4 @@
-# XuanLink（玄链）
+# XuanLink（玄联）
 
 <p align="center">
   <img src="./assets/preview-files.png" alt="XuanLink 主界面" width="80%">
@@ -10,7 +10,7 @@
   <a href="https://github.com/Alex-LILY/XuanLink">GitHub</a>
 </p>
 
-**XuanLink（玄链）** 是一款现代化 Webshell 管理器，提供简洁直观的 Web 界面与丰富的协议支持，适用于授权渗透测试、红队评估与安全研究场景。
+**XuanLink（玄联）** 是一款现代化 Webshell 管理器，提供简洁直观的 Web 界面与丰富的协议支持，适用于授权渗透测试、红队评估与安全研究场景。
 
 项目基于 B/S 架构构建，可直接部署在服务器或本地运行，通过浏览器即可管理目标会话，避免在本地机器上留存敏感工具痕迹。
 
@@ -54,7 +54,7 @@
 
 | 协议 | 支持类型 |
 |------|---------|
-| **玄链默认** | PHP / JSP / ASPX |
+| **玄联默认** | PHP / JSP / ASPX |
 | **冰蝎（Behinder）** | PHP AES/XOR、JSP AES、JSPX AES、ASP XOR、ASPX AES |
 | **哥斯拉（Godzilla）** | PHP XOR、ASP XOR、ASPX AES、JSP AES、JSPX AES |
 | **Linux 命令** | 直接命令执行 |
@@ -150,7 +150,7 @@ poetry run ether_ghost
 ### 创建会话
 
 1. 打开 Web 界面，点击「新建会话」
-2. 选择 Webshell 类型（玄链 / 冰蝎 / 哥斯拉 / Linux CMD）
+2. 选择 Webshell 类型（玄联 / 冰蝎 / 哥斯拉 / Linux CMD）
 3. 填写 URL、密码、连接参数等
 4. 保存后点击「连接」进行测试
 
@@ -172,7 +172,7 @@ poetry run ether_ghost
 
 ### 正向代理
 
-玄链支持两种正向代理：
+玄联支持两种正向代理：
 
 - **Vessel 正向代理**：通过 PHP 内存马实现的持久化代理，支持文件和 Session 两种通信方式
 - **伪正向代理**：通过 gopher 协议以 SSRF 方式转发流量，适合 HTTP 类协议
@@ -187,7 +187,7 @@ poetry run ether_ghost
 
 ### 自定义 Encoder
 
-根据启动时打印的配置路径，打开玄链配置文件夹，找到 `modules/php_encoders` 目录，新建 Python 文件：
+根据启动时打印的配置路径，打开玄联配置文件夹，找到 `modules/php_encoders` 目录，新建 Python 文件：
 
 ```python
 import base64
@@ -196,7 +196,7 @@ def encode(code: str):
     return f"eval(base64_decode({base64.b64encode(code.encode()).decode()!r}));"
 ```
 
-重启玄链后即可在 Webshell 编辑页面看到该 encoder。
+重启玄联后即可在 Webshell 编辑页面看到该 encoder。
 
 ### 自定义 Decoder
 
@@ -233,11 +233,11 @@ module.exports = (pwd, data, ext={}) => {
 }
 ```
 
-> 注意：玄链不支持和蚁剑内部设计高度相关的某些环境变量，部分插件可能需要修改后使用。
+> 注意：玄联不支持和蚁剑内部设计高度相关的某些环境变量，部分插件可能需要修改后使用。
 
 ### 自定义壁纸
 
-将壁纸图片重命名为 `bg.jpg`、`bg.png` 或 `bg.webp`，放入玄链配置文件夹，然后在设置页面将主题改为「玻璃」即可生效。
+将壁纸图片重命名为 `bg.jpg`、`bg.png` 或 `bg.webp`，放入玄联配置文件夹，然后在设置页面将主题改为「玻璃」即可生效。
 
 ---
 
@@ -319,15 +319,15 @@ XuanLink/
 
 ### Q: 为什么不支持在网页端添加 encoder 和 decoder？
 
-Encoder 和 Decoder 会在服务端启动时作为代码被加载。如果攻击者登录了你的玄链实例，可以通过添加 Encoder 的方式控制服务器。因此为了防止 RCE 漏洞，玄链不支持在网页端添加 encoder 和 decoder。
+Encoder 和 Decoder 会在服务端启动时作为代码被加载。如果攻击者登录了你的玄联实例，可以通过添加 Encoder 的方式控制服务器。因此为了防止 RCE 漏洞，玄联不支持在网页端添加 encoder 和 decoder。
 
 ### Q: Vessel 是什么？为什么正向代理有 Vessel 和伪正向两种？
 
-Vessel 是玄链自研的 PHP 持久化内存马，可以通过文件和 Session 两种方式通信。伪正向代理则是通过 gopher 协议以类似 SSRF 的方式发送流量，基本上只支持 HTTP 类协议。
+Vessel 是玄联自研的 PHP 持久化内存马，可以通过文件和 Session 两种方式通信。伪正向代理则是通过 gopher 协议以类似 SSRF 的方式发送流量，基本上只支持 HTTP 类协议。
 
-### Q: 玄链 Webshell 与传统一句话木马有什么区别？
+### Q: 玄联 Webshell 与传统一句话木马有什么区别？
 
-传统一句话木马特征明显、易被查杀。玄链 Webshell 同时加密和混淆流量，使用异或编码和特殊的 8 字节标记定位 payload，可以将流量拼接在图片等任意数据中，显著降低被检测的概率。
+传统一句话木马特征明显、易被查杀。玄联 Webshell 同时加密和混淆流量，使用异或编码和特殊的 8 字节标记定位 payload，可以将流量拼接在图片等任意数据中，显著降低被检测的概率。
 
 ---
 
