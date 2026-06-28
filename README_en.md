@@ -1,7 +1,7 @@
 # XuanLink
 
 <p align="center">
-  <img src="./assets/主界面.png" alt="XuanLink Main Interface" width="80%">
+  <img src="./assets/登录界面.png" alt="XuanLink Login Interface" width="80%">
 </p>
 
 <p align="center">

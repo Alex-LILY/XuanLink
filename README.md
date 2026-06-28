@@ -1,7 +1,7 @@
 # XuanLink（玄联）
 
 <p align="center">
-  <img src="./assets/主界面.png" alt="XuanLink 主界面" width="80%">
+  <img src="./assets/登录界面.png" alt="XuanLink 登录界面" width="80%">
 </p>
 
 <p align="center">
