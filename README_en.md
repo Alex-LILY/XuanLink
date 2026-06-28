@@ -1,7 +1,7 @@
-# ShadowHalberd
+# XuanLink
 
 <p align="center">
-  <img src="./assets/preview-files.png" alt="ShadowHalberd Main Interface" width="80%">
+  <img src="./assets/preview-files.png" alt="XuanLink Main Interface" width="80%">
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
   <a href="https://github.com/Alex-LILY/XuanLink">GitHub</a>
 </p>
 
-**ShadowHalberd** is a modern webshell manager with a clean web UI and broad protocol support, designed for authorized penetration testing, red teaming, and security research.
+**XuanLink** is a modern webshell manager with a clean web UI and broad protocol support, designed for authorized penetration testing, red teaming, and security research.
 
 It runs as a B/S application: deploy it on a server or run it locally, then manage target sessions entirely through your browser, avoiding the need to keep sensitive tooling on your local machine.
 
@@ -54,7 +54,7 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 
 | Protocol | Supported Types |
 |----------|-----------------|
-| **ShadowHalberd Native** | PHP / JSP / ASPX |
+| **XuanLink Native** | PHP / JSP / ASPX |
 | **Behinder** | PHP AES/XOR, JSP AES, JSPX AES, ASP XOR, ASPX AES |
 | **Godzilla** | PHP XOR, ASP XOR, ASPX AES, JSP AES, JSPX AES |
 | **Linux Command** | Direct command execution |
@@ -80,7 +80,7 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 - **RSA2048 + AES256-CBC** encrypted communication
 - Random User-Agent and HTTP junk-data padding
 - Custom encoders/decoders with partial AntSword encoder support
-- ShadowHalberd webshell uses encryption + obfuscation to hide traffic inside random data
+- XuanLink webshell uses encryption + obfuscation to hide traffic inside random data
 
 ---
 
@@ -150,7 +150,7 @@ Open `http://127.0.0.1:8022` in your browser.
 ### Creating a Session
 
 1. Open the web UI and click "New Session"
-2. Select the webshell type (ShadowHalberd / Behinder / Godzilla / Linux CMD)
+2. Select the webshell type (XuanLink / Behinder / Godzilla / Linux CMD)
 3. Fill in the URL, password, and connection parameters
 4. Save and click "Connect" to test
 
@@ -172,7 +172,7 @@ Select the "Terminal" tab to execute system commands on the target host, featuri
 
 ### Forward Proxy
 
-ShadowHalberd supports two types of forward proxy:
+XuanLink supports two types of forward proxy:
 
 - **Vessel Forward Proxy**: A persistent proxy implemented via PHP memory shell, supporting both file and Session communication
 - **Pseudo-Forward Proxy**: Forwards traffic via the gopher protocol in an SSRF-like manner, mainly suitable for HTTP-like protocols
@@ -187,7 +187,7 @@ Create a TCP listener in "Connectors". Once the target host connects, you get a 
 
 ### Custom Encoder
 
-Open the ShadowHalberd configuration folder (printed at startup), find the `modules/php_encoders` directory, and create a Python file:
+Open the XuanLink configuration folder (printed at startup), find the `modules/php_encoders` directory, and create a Python file:
 
 ```python
 import base64
@@ -196,7 +196,7 @@ def encode(code: str):
     return f"eval(base64_decode({base64.b64encode(code.encode()).decode()!r}));"
 ```
 
-Restart ShadowHalberd and the encoder will appear in the webshell editing page.
+Restart XuanLink and the encoder will appear in the webshell editing page.
 
 ### Custom Decoder
 
@@ -233,11 +233,11 @@ module.exports = (pwd, data, ext={}) => {
 }
 ```
 
-> Note: ShadowHalberd does not support some AntSword environment variables that are tightly coupled with AntSword internals. Some plugins may need modification before use.
+> Note: XuanLink does not support some AntSword environment variables that are tightly coupled with AntSword internals. Some plugins may need modification before use.
 
 ### Custom Wallpaper
 
-Rename your wallpaper image to `bg.jpg`, `bg.png`, or `bg.webp`, place it in the ShadowHalberd configuration folder, then set the theme to "Glass" in the settings page.
+Rename your wallpaper image to `bg.jpg`, `bg.png`, or `bg.webp`, place it in the XuanLink configuration folder, then set the theme to "Glass" in the settings page.
 
 ---
 
@@ -281,7 +281,7 @@ See [`pyinstaller_package.bat`](./pyinstaller_package.bat), replace the virtual-
 ### Project Structure
 
 ```text
-ShadowHalberd/
+XuanLink/
 ├── ether_ghost/          # Backend source
 │   ├── api/              # FastAPI routes
 │   ├── core/             # Core protocols and generators
@@ -319,15 +319,15 @@ ShadowHalberd/
 
 ### Q: Why can't encoders and decoders be added from the web UI?
 
-Encoders and decoders are loaded as code when the server starts. If an attacker logs into your ShadowHalberd instance, they could take control of the server by adding an encoder. To prevent RCE vulnerabilities, ShadowHalberd does not support adding encoders/decoders from the web UI.
+Encoders and decoders are loaded as code when the server starts. If an attacker logs into your XuanLink instance, they could take control of the server by adding an encoder. To prevent RCE vulnerabilities, XuanLink does not support adding encoders/decoders from the web UI.
 
 ### Q: What is Vessel? Why are there two forward proxy modes?
 
-Vessel is a custom PHP memory shell developed for ShadowHalberd, supporting both file and Session communication. The pseudo-forward proxy forwards traffic via the gopher protocol in an SSRF-like manner and is basically limited to HTTP-like protocols.
+Vessel is a custom PHP memory shell developed for XuanLink, supporting both file and Session communication. The pseudo-forward proxy forwards traffic via the gopher protocol in an SSRF-like manner and is basically limited to HTTP-like protocols.
 
-### Q: How is the ShadowHalberd webshell different from traditional one-liner webshells?
+### Q: How is the XuanLink webshell different from traditional one-liner webshells?
 
-Traditional one-liner webshells have obvious features and are easily detected. ShadowHalberd webshell encrypts and obfuscates traffic, uses XOR encoding, and uses special 8-byte markers to locate the payload. This allows the payload to be embedded in arbitrary data such as images, significantly reducing the chance of detection.
+Traditional one-liner webshells have obvious features and are easily detected. XuanLink webshell encrypts and obfuscates traffic, uses XOR encoding, and uses special 8-byte markers to locate the payload. This allows the payload to be embedded in arbitrary data such as images, significantly reducing the chance of detection.
 
 ---
 
