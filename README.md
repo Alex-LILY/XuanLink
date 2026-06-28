@@ -82,7 +82,7 @@
 - **RSA2048 + AES256-CBC** 强加密通信
 - 随机 User-Agent、HTTP 垃圾数据填充
 - 自定义 encoder / decoder，支持部分蚁剑 encoder 导入
-- 幽魂 Webshell 采用加密 + 混淆双重防护，将流量隐藏在随机数据中
+- 玄联 Webshell 采用加密 + 混淆双重防护，将流量隐藏在随机数据中
 
 ---
 
