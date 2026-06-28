@@ -1,7 +1,7 @@
 # ShadowHalberd（影戟）
 
 <p align="center">
-  <img src="./assets/preview-homepage.png" alt="ShadowHalberd 主界面" width="80%">
+  <img src="./assets/preview-files.png" alt="ShadowHalberd 主界面" width="80%">
 </p>
 
 <p align="center">
@@ -88,17 +88,17 @@
 
 <p align="center">
   <b>主界面</b><br>
-  <img src="./assets/preview-homepage.png" alt="主界面" width="90%">
+  <img src="./assets/preview-files.png" alt="主界面" width="90%">
 </p>
 
 <p align="center">
-  <b>文件管理</b><br>
-  <img src="./assets/preview-files.png" alt="文件管理" width="90%">
+  <b>系统设置</b><br>
+  <img src="./assets/preview-homepage.png" alt="系统设置" width="90%">
 </p>
 
 <p align="center">
-  <b>命令终端</b><br>
-  <img src="./assets/preview-terminal.png" alt="命令终端" width="90%">
+  <b>代理列表</b><br>
+  <img src="./assets/preview-terminal.png" alt="代理列表" width="90%">
 </p>
 
 ---

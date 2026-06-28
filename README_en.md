@@ -1,7 +1,7 @@
 # ShadowHalberd
 
 <p align="center">
-  <img src="./assets/preview-homepage.png" alt="ShadowHalberd Main Interface" width="80%">
+  <img src="./assets/preview-files.png" alt="ShadowHalberd Main Interface" width="80%">
 </p>
 
 <p align="center">
@@ -88,17 +88,17 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 
 <p align="center">
   <b>Main Interface</b><br>
-  <img src="./assets/preview-homepage.png" alt="Main Interface" width="90%">
+  <img src="./assets/preview-files.png" alt="Main Interface" width="90%">
 </p>
 
 <p align="center">
-  <b>File Management</b><br>
-  <img src="./assets/preview-files.png" alt="File Management" width="90%">
+  <b>Settings</b><br>
+  <img src="./assets/preview-homepage.png" alt="Settings" width="90%">
 </p>
 
 <p align="center">
-  <b>Command Terminal</b><br>
-  <img src="./assets/preview-terminal.png" alt="Command Terminal" width="90%">
+  <b>Proxy List</b><br>
+  <img src="./assets/preview-terminal.png" alt="Proxy List" width="90%">
 </p>
 
 ---
