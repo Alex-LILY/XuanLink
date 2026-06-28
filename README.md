@@ -345,4 +345,4 @@ Vessel 是影戟自研的 PHP 持久化内存马，可以通过文件和 Session
 
 ## 致谢
 
-项目最初灵感来自蚁剑、冰蝎、哥斯拉等优秀工具，并参考了 kimi/wsm 等实现。
+项目最初灵感来自蚁剑、冰蝎、哥斯拉等优秀工具，并参考 [EtherGhost](https://github.com/Marven11/EtherGhost) 与 [wsm](https://github.com/xiecat/wsm) 等实现进行开发。

@@ -143,4 +143,4 @@ This project is intended only for authorized security testing, vulnerability res
 
 ## Acknowledgements
 
-Inspired by excellent tools such as AntSword, Behinder, and Godzilla, with reference to implementations like kimi/wsm.
+Inspired by excellent tools such as AntSword, Behinder, and Godzilla, with reference to implementations such as [EtherGhost](https://github.com/Marven11/EtherGhost) and [wsm](https://github.com/xiecat/wsm).
