@@ -15,3 +15,15 @@ export function setLang(l) {
 export function sessionTypeName(id, fallback) {
   return t.value.sessionTypes?.[id] || fallback || id
 }
+
+export function optionGroupName(name) {
+  return t.value.optionGroupNames?.[name] || name
+}
+
+export function optionName(name) {
+  return t.value.optionNames?.[name] || name
+}
+
+export function optionPlaceholder(text) {
+  return t.value.optionPlaceholders?.[text] || text
+}

@@ -4,7 +4,7 @@ import { getDataOrPopupError, postDataOrPopupError, addPopup, doAssert } from "@
 import GroupedForm from "@/components/GroupedForm.vue"
 import { store } from "@/assets/store";
 import { useRouter } from "vue-router"
-import { t } from "@/i18n"
+import { t, optionGroupName, optionName, optionPlaceholder } from "@/i18n"
 
 const router = useRouter()
 const props = defineProps({
@@ -33,7 +33,11 @@ watch(t, (newT) => {
   basicOptionGroup.options[1].placeholder = newT.connectorEditor.notePh
   basicOptionGroup.options[2].name = newT.connectorEditor.type
   basicOptionGroup.options[3].name = newT.connectorEditor.autostart
-  optionsGroups.value = [...optionsGroups.value]
+  if (optionValues.connector_type) {
+    updateOption(optionValues.connector_type)
+  } else {
+    optionsGroups.value = [...optionsGroups.value]
+  }
 })
 
 const optionValues = reactive({
@@ -44,9 +48,27 @@ const optionValues = reactive({
 })
 const optionsGroups = shallowRef([])
 
+function translateOptions(groups) {
+  for (let group of groups) {
+    group.name = optionGroupName(group.name)
+    for (let option of group.options) {
+      option.name = optionName(option.name)
+      if (option.placeholder) {
+        option.placeholder = optionPlaceholder(option.placeholder)
+      }
+      if (option.alternatives) {
+        for (let alt of option.alternatives) {
+          alt.name = optionName(alt.name)
+        }
+      }
+    }
+  }
+  return groups
+}
+
 async function updateOption(connectorType) {
   let options = await getDataOrPopupError(`/connectortype/${connectorType}/conn_options`)
-  optionsGroups.value = [basicOptionGroup, ...options]
+  optionsGroups.value = translateOptions([basicOptionGroup, ...options])
   for (let group of optionsGroups.value) {
     for (let option of group.options) {
       if (option.default_value !== undefined && option.default_value !== null) {

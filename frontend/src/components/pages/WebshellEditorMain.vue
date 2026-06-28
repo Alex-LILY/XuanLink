@@ -4,7 +4,7 @@ import { getDataOrPopupError, postDataOrPopupError, addPopup, doAssert } from "@
 import GroupedForm from "@/components/GroupedForm.vue"
 import { store } from "@/assets/store";
 import { useRouter } from "vue-router"
-import { t, sessionTypeName } from "@/i18n"
+import { t, sessionTypeName, optionGroupName, optionName, optionPlaceholder } from "@/i18n"
 
 const proxyAlternatives = ref([])
 
@@ -75,7 +75,11 @@ watch(t, (newT) => {
   basicOptionGroup.options[2].name = newT.webshellEditor.tags
   basicOptionGroup.options[2].placeholder = newT.webshellEditor.tagsPh
   basicOptionGroup.options[3].name = newT.webshellEditor.type
-  optionsGroups.value = [...optionsGroups.value]
+  if (optionValues.session_type) {
+    updateOption(optionValues.session_type)
+  } else {
+    optionsGroups.value = [...optionsGroups.value]
+  }
 })
 
 const optionValues = reactive({
@@ -85,9 +89,27 @@ const optionValues = reactive({
 })
 const optionsGroups = shallowRef([])
 
+function translateOptions(groups) {
+  for (let group of groups) {
+    group.name = optionGroupName(group.name)
+    for (let option of group.options) {
+      option.name = optionName(option.name)
+      if (option.placeholder) {
+        option.placeholder = optionPlaceholder(option.placeholder)
+      }
+      if (option.alternatives) {
+        for (let alt of option.alternatives) {
+          alt.name = optionName(alt.name)
+        }
+      }
+    }
+  }
+  return groups
+}
+
 async function updateOption(sessionType) {
   let options = await getDataOrPopupError(`/sessiontype/${sessionType}/conn_options`)
-  optionsGroups.value = [basicOptionGroup, ...options]
+  optionsGroups.value = translateOptions([basicOptionGroup, ...options])
   for (let group of optionsGroups.value) {
     for (let option of group.options) {
       if (option.default_value !== undefined && option.default_value !== null) {
