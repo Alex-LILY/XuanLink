@@ -312,6 +312,13 @@ def delete_session_by_session_type(session_type: str) -> int:
     return count
 
 
+def delete_all_sessions() -> int:
+    """删除所有session，返回删除的数量"""
+    count = orm_session.query(SessionInfoModel).delete()
+    orm_session.commit()
+    return count
+
+
 def list_session_connectors() -> t.List[SessionConnectorInfo]:
     """列出数据库中所有的session connector"""
     return [

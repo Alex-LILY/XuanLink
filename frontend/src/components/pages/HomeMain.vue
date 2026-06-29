@@ -376,6 +376,19 @@ function cancelBatchDelete() {
   batchDeleteSessionIds.value = []
 }
 
+const showClearAllModal = ref(false)
+
+async function confirmClearAll() {
+  try {
+    const result = await postDataOrPopupError("/clear_all_sessions", {})
+    addPopup("green", t.value.home.clearAllOkTitle, t.value.home.clearAllOkMsg.replace('{count}', result.deleted))
+    selectedSessionIds.value = new Set()
+    setTimeout(fetchWebshell, 0)
+  } finally {
+    showClearAllModal.value = false
+  }
+}
+
 function selectSession(session) {
   store.session = session.id
 }
@@ -454,6 +467,10 @@ async function confirmBatchImport() {
             <path d="M12 6v6l4 2" />
           </svg>
           {{ t.home.toolGlobalProbe }}
+        </button>
+        <button class="tool-btn danger" @click="showClearAllModal = true">
+          <IconDelete />
+          {{ t.home.toolClearAll }}
         </button>
         <button class="tool-btn secondary" @click="probeAllSessions">
           <IconLoad />
@@ -606,6 +623,24 @@ async function confirmBatchImport() {
             <div class="delete-modal-actions">
               <button class="tool-btn secondary" @click="cancelBatchDelete">{{ t.home.modal.cancel }}</button>
               <button class="tool-btn danger" @click="confirmBatchDelete">{{ t.home.modal.confirmDelete }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="showClearAllModal" class="modal-overlay" @click.self="showClearAllModal = false">
+        <div class="modal-container delete-modal-container" @click.stop>
+          <div class="modal-header">
+            <h2>{{ t.home.clearAllTitle }}</h2>
+            <button class="modal-close" @click="showClearAllModal = false" :title="t.home.modal.close">
+              <IconCross />
+            </button>
+          </div>
+          <div class="modal-body delete-modal-body">
+            <p class="delete-modal-text">{{ t.home.clearAllConfirm }}</p>
+            <div class="delete-modal-actions">
+              <button class="tool-btn secondary" @click="showClearAllModal = false">{{ t.home.modal.cancel }}</button>
+              <button class="tool-btn danger" @click="confirmClearAll">{{ t.home.modal.confirmDelete }}</button>
             </div>
           </div>
         </div>

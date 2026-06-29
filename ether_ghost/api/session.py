@@ -639,6 +639,15 @@ async def batch_delete_sessions(request: BatchDeleteRequest):
     return {"code": 0, "data": {"deleted": deleted, "failed": failed}}
 
 
+@router.post("/clear_all_sessions")
+@catch_user_error
+async def clear_all_sessions():
+    """清空所有 session"""
+    deleted = db.delete_all_sessions()
+    session_manager.clear_session_cache()
+    return {"code": 0, "data": {"deleted": deleted}}
+
+
 def _get_process(process_id: UUID) -> ProcessProtocol:
     process = processes.get(process_id)
     if process is None:
