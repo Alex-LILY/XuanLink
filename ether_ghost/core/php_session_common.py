@@ -190,6 +190,27 @@ if(!is_file($filePath) && !is_writeable(dirname($filePath))) {
 """
 )
 
+TOUCH_LIKE_PHP = compress_phpcode_template(
+    """
+error_reporting(0);
+$target = {target_filepath};
+$source = {source_filepath};
+if(!file_exists($target) || !file_exists($source)) {
+    decoder_echo("WRONG_NOT_FOUND");
+} else {
+    $mtime = filemtime($source);
+    $atime = fileatime($source);
+    if($atime === false) { $atime = $mtime; }
+    $result = touch($target, $mtime, $atime);
+    if($result) {
+        decoder_echo("OK");
+    } else {
+        decoder_echo("WRONG_PERMISSION");
+    }
+}
+"""
+)
+
 MODIFY_FILE_PHP = compress_phpcode_template(
     """
 $filePath = {filepath};
@@ -1026,6 +1047,16 @@ class PHPWebshellActions(PHPSessionInterface):
         if result == "WRONG_NO_PERMISSION":
             raise exceptions.FileError("没有权限保存这个文件")
         return result == "SUCCESS"
+
+    async def touch_like(self, target_filepath: str, source_filepath: str) -> bool:
+        """将 target 的修改时间设置为 source 的修改时间，失败返回 False"""
+        php_code = format_phpcode(
+            TOUCH_LIKE_PHP,
+            target_filepath=string_repr(target_filepath),
+            source_filepath=string_repr(source_filepath),
+        )
+        result = await self.submit(php_code)
+        return result == "OK"
 
     async def modify_file(
         self,

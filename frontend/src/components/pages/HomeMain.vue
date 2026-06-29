@@ -1386,21 +1386,24 @@ async function confirmBatchImport() {
 }
 
 .group-modal-container {
-  max-width: 480px;
+  max-width: 640px;
   width: 90%;
   height: auto;
+  min-height: 320px;
 }
 
 .group-modal-body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-height: 220px;
 }
 
 .group-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  margin-top: auto;
 }
 
 .basic-info-modal-container {

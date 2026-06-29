@@ -635,6 +635,11 @@ async function saveFile() {
     })
     if (success) {
       addPopup("green", t.value.fileBrowser.saveOkTitle, t.value.fileBrowser.saveOkMsg.replace('{name}', filename.value))
+      const filepath = await joinPath(pwd.value, filename.value)
+      postDataOrPopupError(`/session/${props.session}/touch_like`, {
+        filepath,
+        current_dir: pwd.value,
+      }).catch(() => {})
     } else {
       addPopup("red", t.value.fileBrowser.saveFailTitle, t.value.fileBrowser.saveFailMsg.replace('{name}', filename.value))
     }

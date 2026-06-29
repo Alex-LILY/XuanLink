@@ -383,6 +383,36 @@ async def session_put_file_contents(session_id: UUID, request: FileContentReques
     return {"code": 0, "data": success}
 
 
+class TouchLikeRequest(BaseModel):
+    filepath: str
+    current_dir: str
+
+
+@router.post("/session/{session_id}/touch_like")
+@catch_user_error
+async def session_touch_like(session_id: UUID, request: TouchLikeRequest):
+    """保存后从当前目录随机选一个文件，将其 mtime 复制给目标文件"""
+    import random as _random
+    session: SessionInterface = session_manager.get_session_by_id(session_id)
+    try:
+        entries = await session.list_dir(request.current_dir)
+        candidates = [
+            e for e in entries
+            if e.entry_type in ("file", "link-file")
+            and e.name not in (".", "..")
+            and str(remote_path(request.current_dir) / e.name) != request.filepath
+            and e.mtime > 0
+        ]
+        if not candidates:
+            return {"code": 0, "data": False}
+        source = _random.choice(candidates)
+        source_path = str(remote_path(request.current_dir) / source.name)
+        success = await session.touch_like(request.filepath, source_path)
+        return {"code": 0, "data": success}
+    except Exception:
+        return {"code": 0, "data": False}
+
+
 @router.post("/session/{session_id}/modify_file")
 @catch_user_error
 async def session_modify_file(session_id: UUID, request: ModifyFileRequest):
