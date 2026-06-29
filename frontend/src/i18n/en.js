@@ -470,6 +470,10 @@ export default {
     save: 'Save',
     test: 'Test',
     proxyExpired: ' (expired)',
+    groupLabel: 'Group',
+    groupAdd: 'Add Group',
+    groupPh: 'Enter group name...',
+    groupNone: 'No groups yet',
   },
   basicInfo: {
     openPhpInfo: 'Open PHPINFO',

@@ -470,6 +470,10 @@ export default {
     save: '保存',
     test: '测试',
     proxyExpired: '（已失效）',
+    groupLabel: '分组',
+    groupAdd: '添加分组',
+    groupPh: '输入分组名...',
+    groupNone: '暂无分组',
   },
   basicInfo: {
     openPhpInfo: '打开PHPINFO',

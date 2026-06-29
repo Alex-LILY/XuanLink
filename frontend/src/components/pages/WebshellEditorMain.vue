@@ -2,6 +2,7 @@
 import { ref, shallowRef, reactive, watch, computed } from "vue";
 import { getDataOrPopupError, postDataOrPopupError, addPopup, doAssert } from "@/assets/utils"
 import GroupedForm from "@/components/GroupedForm.vue"
+import TagSelector from "@/components/TagSelector.vue"
 import { store } from "@/assets/store";
 import { useRouter } from "vue-router"
 import { t, sessionTypeName, optionGroupName, optionName, optionPlaceholder } from "@/i18n"
@@ -63,7 +64,6 @@ const basicOptionGroup = reactive({
   options: [
     { id: "name", name: t.value.webshellEditor.name, type: "text", placeholder: "xxx", default_value: undefined },
     { id: "note", name: t.value.webshellEditor.note, type: "text", placeholder: "xxx...", default_value: t.value.webshellEditor.noNote },
-    { id: "tags", name: t.value.webshellEditor.tags, type: "text", placeholder: t.value.webshellEditor.tagsPh, default_value: "" },
     { id: "session_type", name: t.value.webshellEditor.type, type: "select", default_value: undefined, alternatives: [] },
   ]
 })
@@ -72,9 +72,7 @@ watch(t, (newT) => {
   basicOptionGroup.name = newT.webshellEditor.basicGroup
   basicOptionGroup.options[0].name = newT.webshellEditor.name
   basicOptionGroup.options[1].name = newT.webshellEditor.note
-  basicOptionGroup.options[2].name = newT.webshellEditor.tags
-  basicOptionGroup.options[2].placeholder = newT.webshellEditor.tagsPh
-  basicOptionGroup.options[3].name = newT.webshellEditor.type
+  basicOptionGroup.options[2].name = newT.webshellEditor.type
   if (optionValues.session_type) {
     updateOption(optionValues.session_type)
   } else {
@@ -85,7 +83,7 @@ watch(t, (newT) => {
 const optionValues = reactive({
   name: "",
   session_type: "ONELINE_PHP",
-  tags: ""
+  tags: []
 })
 const optionsGroups = shallowRef([])
 
@@ -134,14 +132,12 @@ async function fetchSupportedSessionTypes() {
 async function fetchCurrentSession() {
   const session = await getDataOrPopupError(`/session/${props.session}`)
   await updateOption(session.session_type)
+  optionValues.tags = session.tags || []
   for (const group of optionsGroups.value) {
     for (const option of group.options) {
       doAssert(["text", "checkbox", "select"].includes(option.type), t.value.webshellEditor.internalErr)
       if (["name", "session_type", "note"].includes(option.id)) {
         optionValues[option.id] = session[option.id]
-      } else if (option.id === "tags") {
-        const tags = session.tags || []
-        optionValues.tags = Array.isArray(tags) ? tags.join(", ") : String(tags)
       } else if (session.connection[option.id] !== undefined && session.connection[option.id] !== null) {
         optionValues[option.id] = session.connection[option.id]
       }
@@ -155,6 +151,7 @@ function getCurrentSession() {
   if (!optionValues["session_type"]) {
     return undefined;
   }
+  session.tags = optionValues.tags
   for (const group of optionsGroups.value) {
     for (const option of group.options) {
       doAssert(["text", "checkbox", "select"].includes(option.type), t.value.webshellEditor.internalErr)
@@ -164,10 +161,6 @@ function getCurrentSession() {
       }
       if (["name", "session_type", "note"].includes(option.id)) {
         session[option.id] = optionValues[option.id]
-      } else if (option.id === "tags") {
-        session.tags = optionValues.tags
-          ? optionValues.tags.split(/[,，]/).map(t => t.trim()).filter(t => t)
-          : []
       } else {
         session.connection[option.id] = optionValues[option.id]
       }
@@ -250,6 +243,10 @@ setTimeout(async () => {
 </script>
 
 <template>
+  <TagSelector
+    v-model="optionValues.tags"
+    style="margin-bottom: 12px"
+  />
   <GroupedForm
     :groups="optionsGroups"
     :modelValue="optionValues"

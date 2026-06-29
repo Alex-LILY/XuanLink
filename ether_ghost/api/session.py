@@ -248,6 +248,15 @@ async def api_list_sessions(session_id: t.Union[UUID, None] = None):
     return {"code": 0, "data": await get_session(session_id)}
 
 
+@router.get("/session/tags")
+@catch_user_error
+async def get_all_tags():
+    """获取系统中所有 session 的去重标签列表"""
+    sessions = db.list_sessions()
+    tags = sorted({tag for session in sessions for tag in (session.tags or [])})
+    return {"code": 0, "data": tags}
+
+
 @router.get("/session/{session_id}")
 @catch_user_error
 async def api_get_session(session_id: UUID):
