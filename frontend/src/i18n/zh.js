@@ -77,6 +77,7 @@ export default {
       files: '浏览文件',
       proxy: '打开代理',
       info: '基本信息',
+      setGroup: '设置分组',
       edit: '修改webshell',
       delete: '删除Webshell',
       batchDelete: '批量删除',
@@ -147,6 +148,10 @@ export default {
     terminalTitle: '终端',
     clearTerminal: '清空终端',
     fileBrowserTitle: '文件管理',
+    groupModalTitle: '设置分组',
+    groupModalSave: '保存',
+    groupSaveOkTitle: '保存成功',
+    groupSaveOkMsg: '分组已更新',
   },
   settings: {
     pageTitle: '系统设置',

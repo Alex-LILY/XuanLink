@@ -77,6 +77,7 @@ export default {
       files: 'Browse Files',
       proxy: 'Open Proxy',
       info: 'Basic Info',
+      setGroup: 'Set Group',
       edit: 'Edit WebShell',
       delete: 'Delete WebShell',
       batchDelete: 'Batch Delete',
@@ -147,6 +148,10 @@ export default {
     terminalTitle: 'Terminal',
     clearTerminal: 'Clear Terminal',
     fileBrowserTitle: 'File Manager',
+    groupModalTitle: 'Set Group',
+    groupModalSave: 'Save',
+    groupSaveOkTitle: 'Saved',
+    groupSaveOkMsg: 'Group updated successfully',
   },
   settings: {
     pageTitle: 'System Settings',

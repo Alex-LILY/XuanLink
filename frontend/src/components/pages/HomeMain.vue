@@ -14,6 +14,7 @@ import IconTerminal from "@/components/icons/iconTerminal.vue"
 import IconLoad from "@/components/icons/iconLoad.vue";
 
 import ClickMenu from "@/components/ClickMenu.vue"
+import TagSelector from "@/components/TagSelector.vue"
 import { addPopup, ClickMenuManager, getDataOrPopupError, postDataOrPopupError, parseDataOrPopupError } from "@/assets/utils";
 import { useRouter } from "vue-router"
 import WebshellEditorMain from "@/components/pages/WebshellEditorMain.vue"
@@ -159,6 +160,7 @@ function getSessionMenuItems() {
     { name: "browse_files", text: t.value.home.menu.files, icon: IconFileBrowser, color: "white", link: undefined, func: (session) => openFileBrowserModal(session) },
     { name: "open_proxy", text: t.value.home.menu.proxy, icon: IconProxy, color: "white", link: "/proxies/SESSION" },
     { name: "get_info", text: t.value.home.menu.info, icon: IconInfo, color: "white", link: undefined, func: (session) => openBasicInfoModal(session) },
+    { name: "set_group", text: t.value.home.menu.setGroup, icon: IconHash, color: "white", link: undefined, func: (session) => openGroupModal(session) },
     { name: "edit_session", text: t.value.home.menu.edit, icon: IconEdit, color: "white", link: undefined, func: (session) => openEditModal(session) },
     { name: "delete_session", text: t.value.home.menu.delete, icon: IconDelete, color: "red", link: undefined, func: (session) => onMarkDeleteSession(session) },
   ]
@@ -386,6 +388,29 @@ async function confirmClearAll() {
     setTimeout(fetchWebshell, 0)
   } finally {
     showClearAllModal.value = false
+  }
+}
+
+const showGroupModal = ref(false)
+const groupModalSession = ref(null)
+const groupModalTags = ref([])
+
+function openGroupModal(session) {
+  groupModalSession.value = session
+  groupModalTags.value = [...(session.tags || [])]
+  showGroupModal.value = true
+}
+
+async function saveGroupModal() {
+  if (!groupModalSession.value) return
+  try {
+    await postDataOrPopupError(`/session/${groupModalSession.value.id}/set_tags`, {
+      tags: groupModalTags.value,
+    })
+    addPopup("green", t.value.home.groupSaveOkTitle, t.value.home.groupSaveOkMsg)
+    setTimeout(fetchWebshell, 0)
+  } finally {
+    showGroupModal.value = false
   }
 }
 
@@ -649,6 +674,28 @@ async function confirmBatchImport() {
   </Teleport>
 
   <WebshellGenerator :show="showGeneratorModal" @close="showGeneratorModal = false" />
+
+  <Teleport to="body">
+    <transition>
+      <div v-if="showGroupModal" class="modal-overlay" @click.self="showGroupModal = false">
+        <div class="modal-container group-modal-container" @click.stop>
+          <div class="modal-header">
+            <h2>{{ t.home.groupModalTitle }} — {{ groupModalSession?.name }}</h2>
+            <button class="modal-close" @click="showGroupModal = false" :title="t.home.modal.close">
+              <IconCross />
+            </button>
+          </div>
+          <div class="modal-body group-modal-body">
+            <TagSelector v-model="groupModalTags" />
+            <div class="group-modal-actions">
+              <button class="tool-btn secondary" @click="showGroupModal = false">{{ t.home.modal.cancel }}</button>
+              <button class="tool-btn primary" @click="saveGroupModal">{{ t.home.groupModalSave }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </Teleport>
 
   <Teleport to="body">
     <transition>
@@ -1336,6 +1383,24 @@ async function confirmBatchImport() {
   justify-content: flex-end;
   gap: 12px;
   margin-top: 4px;
+}
+
+.group-modal-container {
+  max-width: 480px;
+  width: 90%;
+  height: auto;
+}
+
+.group-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.group-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .basic-info-modal-container {

@@ -257,6 +257,20 @@ async def get_all_tags():
     return {"code": 0, "data": tags}
 
 
+class SetTagsRequest(BaseModel):
+    tags: t.List[str]
+
+
+@router.post("/session/{session_id}/set_tags")
+@catch_user_error
+async def set_session_tags(session_id: UUID, request: SetTagsRequest):
+    """更新 session 的分组标签"""
+    success = db.update_session_info_cache(str(session_id), {"tags": request.tags})
+    if not success:
+        raise UserError("没有这个session")
+    return {"code": 0, "data": True}
+
+
 @router.get("/session/{session_id}")
 @catch_user_error
 async def api_get_session(session_id: UUID):
