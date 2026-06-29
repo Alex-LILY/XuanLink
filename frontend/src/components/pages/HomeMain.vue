@@ -154,7 +154,7 @@ const router = useRouter();
 let clickedSession = null
 
 function getSessionMenuItems() {
-  const items = [
+  return [
     { name: "terminal", text: t.value.home.menu.terminal, icon: IconTerminal, color: "white", link: undefined, func: (session) => openTerminalModal(session) },
     { name: "browse_files", text: t.value.home.menu.files, icon: IconFileBrowser, color: "white", link: undefined, func: (session) => openFileBrowserModal(session) },
     { name: "open_proxy", text: t.value.home.menu.proxy, icon: IconProxy, color: "white", link: "/proxies/SESSION" },
@@ -162,17 +162,6 @@ function getSessionMenuItems() {
     { name: "edit_session", text: t.value.home.menu.edit, icon: IconEdit, color: "white", link: undefined, func: (session) => openEditModal(session) },
     { name: "delete_session", text: t.value.home.menu.delete, icon: IconDelete, color: "red", link: undefined, func: (session) => onMarkDeleteSession(session) },
   ]
-  if (selectedSessionIds.value.size >= 2) {
-    items.unshift({
-      name: "batch_delete",
-      text: t.value.home.menu.batchDelete,
-      icon: IconDelete,
-      color: "red",
-      link: undefined,
-      func: () => onBatchDelete(),
-    })
-  }
-  return items
 }
 
 const ClickMenuSession = ClickMenuManager(
@@ -479,6 +468,10 @@ async function confirmBatchImport() {
         </div>
       </div>
       <div class="toolbar-right">
+        <button v-if="selectedSessionIds.size > 0" class="tool-btn danger" @click="onBatchDelete">
+          <IconDelete />
+          {{ t.home.toolDeleteSelected }}（{{ selectedSessionIds.size }}）
+        </button>
         <button class="tool-btn secondary" @click="showGeneratorModal = true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />

@@ -137,6 +137,7 @@ export default {
     toolRefreshAll: '全部刷新',
     toolGenerate: '生成 WebShell',
     toolBatchImport: '批量导入',
+    toolDeleteSelected: '删除所选',
     colOps: '操作',
     terminalTitle: '终端',
     clearTerminal: '清空终端',

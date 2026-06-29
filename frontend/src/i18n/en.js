@@ -137,6 +137,7 @@ export default {
     toolRefreshAll: 'Refresh All',
     toolGenerate: 'Generate WebShell',
     toolBatchImport: 'Batch Import',
+    toolDeleteSelected: 'Delete Selected',
     colOps: 'Actions',
     terminalTitle: 'Terminal',
     clearTerminal: 'Clear Terminal',
