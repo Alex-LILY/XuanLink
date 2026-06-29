@@ -361,6 +361,7 @@ export default {
     btnNewFile: 'New File',
     btnUpload: 'Upload',
     colName: 'Name',
+    colMtime: 'Modified',
     colSize: 'Size',
     colPerm: 'Permissions',
     colOps: 'Actions',

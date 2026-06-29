@@ -148,6 +148,7 @@ async function listDir(newPwd) {
       icon: entryIcons[entry.entry_type],
       permission: entry.permission,
       filesize: entry.filesize,
+      mtime: entry.mtime || 0,
     }
   })
 }
@@ -719,6 +720,13 @@ async function applyChmod() {
 // #################
 
 
+function readableFileMtime(mtime) {
+  if (!mtime) return '—'
+  const d = new Date(mtime * 1000)
+  const pad = n => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
 function readableFilePerm(filePerm) {
   let result = ""
   for (let chr of filePerm) {
@@ -781,6 +789,7 @@ function readableFilePerm(filePerm) {
       <div class="file-list-panel scrollbar shadow-box" @click.right.stop="onRightClickEmpty">
         <div class="file-list-header">
           <div class="col-name">{{ t.fileBrowser.colName }}</div>
+          <div class="col-mtime">{{ t.fileBrowser.colMtime }}</div>
           <div class="col-size">{{ t.fileBrowser.colSize }}</div>
           <div class="col-perm">{{ t.fileBrowser.colPerm }}</div>
           <div class="col-actions">{{ t.fileBrowser.colOps }}</div>
@@ -795,6 +804,7 @@ function readableFilePerm(filePerm) {
             <component :is="entry.icon" class="entry-icon"></component>
             <a href="#" @click.prevent="openEntry(entry)" class="entry-name-link" :title="entry.name">{{ entry.name }}</a>
           </div>
+          <div class="col-mtime">{{ readableFileMtime(entry.mtime) }}</div>
           <div class="col-size">{{ ['dir', 'link-dir'].includes(entry.entryType) ? '—' : readableFileSize(entry.filesize) }}</div>
           <div class="col-perm">{{ readableFilePerm(entry.permission) }}</div>
           <div class="col-actions entry-actions">
@@ -1116,11 +1126,18 @@ input[type="text"] {
 .file-list-header,
 .file-item {
   display: grid;
-  grid-template-columns: 1fr 110px 90px auto;
+  grid-template-columns: 1fr 130px 110px 90px auto;
   gap: 8px;
   padding: 10px 16px;
   align-items: center;
   font-size: 0.85rem;
+}
+
+.col-mtime {
+  color: var(--font-color-secondary);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  white-space: nowrap;
 }
 
 .file-list-header {

@@ -129,7 +129,8 @@ foreach ($files as $file) {
         "name" => basename($file),
         "type" => $fileType,
         "permission" => substr(decoct(fileperms($filePath)), -3),
-        "filesize" => filesize($filePath)
+        "filesize" => filesize($filePath),
+        "mtime" => filemtime($filePath)
     ));
 }
 decoder_echo(json_encode($result));
@@ -966,6 +967,7 @@ class PHPWebshellActions(PHPSessionInterface):
                     else "unknown"
                 ),
                 filesize=item["filesize"],
+                mtime=item.get("mtime", 0),
             )
             for item in result
         ]

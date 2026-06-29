@@ -361,6 +361,7 @@ export default {
     btnNewFile: '新建文件',
     btnUpload: '上传',
     colName: '名称',
+    colMtime: '修改时间',
     colSize: '大小',
     colPerm: '权限',
     colOps: '操作',

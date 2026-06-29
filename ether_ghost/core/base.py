@@ -66,6 +66,7 @@ class DirectoryEntry:
     permission: str
     filesize: int
     entry_type: t.Literal["dir", "file", "link-dir", "link-file", "unknown"] = "file"
+    mtime: int = 0
 
 
 @dataclass
