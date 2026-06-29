@@ -20,6 +20,7 @@ import WebshellEditorMain from "@/components/pages/WebshellEditorMain.vue"
 import TerminalMain from "@/components/pages/TerminalMain.vue"
 import FileBrowserMain from "@/components/pages/FileBrowserMain.vue"
 import WebshellGenerator from "@/components/WebshellGenerator.vue"
+import { TerminalApi } from 'vue-web-terminal'
 import axios from "axios"
 import sanitizeHtml from "sanitize-html";
 
@@ -31,6 +32,35 @@ const sessions = ref([])
 const currentPage = ref(1)
 const pageSize = 25
 const searchQuery = ref("")
+const selectedSessionIds = ref(new Set())
+
+const isAllPageSelected = computed(() => {
+  if (pagedSessions.value.length === 0) return false
+  return pagedSessions.value.every(session => selectedSessionIds.value.has(session.id))
+})
+
+function toggleSessionSelection(sessionId) {
+  const newSet = new Set(selectedSessionIds.value)
+  if (newSet.has(sessionId)) {
+    newSet.delete(sessionId)
+  } else {
+    newSet.add(sessionId)
+  }
+  selectedSessionIds.value = newSet
+}
+
+function toggleSelectAllPage() {
+  const newSet = new Set(selectedSessionIds.value)
+  const allSelected = isAllPageSelected.value
+  for (const session of pagedSessions.value) {
+    if (allSelected) {
+      newSet.delete(session.id)
+    } else {
+      newSet.add(session.id)
+    }
+  }
+  selectedSessionIds.value = newSet
+}
 
 const sortColumn = ref("")
 const sortOrder = ref("asc")
@@ -123,16 +153,35 @@ function extractIp(ip) {
 const router = useRouter();
 let clickedSession = null
 
-const ClickMenuSession = ClickMenuManager(
-  [
+function getSessionMenuItems() {
+  const items = [
     { name: "terminal", text: t.value.home.menu.terminal, icon: IconTerminal, color: "white", link: undefined, func: (session) => openTerminalModal(session) },
     { name: "browse_files", text: t.value.home.menu.files, icon: IconFileBrowser, color: "white", link: undefined, func: (session) => openFileBrowserModal(session) },
     { name: "open_proxy", text: t.value.home.menu.proxy, icon: IconProxy, color: "white", link: "/proxies/SESSION" },
     { name: "get_info", text: t.value.home.menu.info, icon: IconInfo, color: "white", link: undefined, func: (session) => openBasicInfoModal(session) },
     { name: "edit_session", text: t.value.home.menu.edit, icon: IconEdit, color: "white", link: undefined, func: (session) => openEditModal(session) },
     { name: "delete_session", text: t.value.home.menu.delete, icon: IconDelete, color: "red", link: undefined, func: (session) => onMarkDeleteSession(session) },
-  ],
+  ]
+  if (selectedSessionIds.value.size >= 2) {
+    items.unshift({
+      name: "batch_delete",
+      text: t.value.home.menu.batchDelete,
+      icon: IconDelete,
+      color: "red",
+      link: undefined,
+      func: () => onBatchDelete(),
+    })
+  }
+  return items
+}
+
+const ClickMenuSession = ClickMenuManager(
+  getSessionMenuItems(),
   (item) => {
+    if (item.name === "batch_delete") {
+      item.func()
+      return
+    }
     if (item.link) {
       const uri = item.link.replace("SESSION", clickedSession.id)
       router.push(uri)
@@ -143,19 +192,17 @@ const ClickMenuSession = ClickMenuManager(
 )
 
 watch(t, (newT) => {
-  ClickMenuSession.items.value = [
-    { name: "terminal", text: newT.home.menu.terminal, icon: IconTerminal, color: "white", link: undefined, func: (session) => openTerminalModal(session) },
-    { name: "browse_files", text: newT.home.menu.files, icon: IconFileBrowser, color: "white", link: undefined, func: (session) => openFileBrowserModal(session) },
-    { name: "open_proxy", text: newT.home.menu.proxy, icon: IconProxy, color: "white", link: "/proxies/SESSION" },
-    { name: "get_info", text: newT.home.menu.info, icon: IconInfo, color: "white", link: undefined, func: (session) => openBasicInfoModal(session) },
-    { name: "edit_session", text: newT.home.menu.edit, icon: IconEdit, color: "white", link: undefined, func: (session) => openEditModal(session) },
-    { name: "delete_session", text: newT.home.menu.delete, icon: IconDelete, color: "red", link: undefined, func: (session) => onMarkDeleteSession(session) },
-  ]
+  ClickMenuSession.items.value = getSessionMenuItems()
 })
+
+watch(selectedSessionIds, () => {
+  ClickMenuSession.items.value = getSessionMenuItems()
+}, { deep: true })
 
 function onRowRightClick(event, session) {
   clickedSession = session;
   store.session = session.id;
+  ClickMenuSession.items.value = getSessionMenuItems()
   ClickMenuSession.onshow(event)
 }
 
@@ -235,6 +282,10 @@ function openTerminalModal(session, pwd = "") {
   showTerminalModal.value = true
 }
 
+function clearTerminal() {
+  TerminalApi.clearLog("my-terminal")
+}
+
 function openFileBrowserModal(session) {
   fileBrowserSession.value = session.id
   showFileBrowserModal.value = true
@@ -296,6 +347,46 @@ function cancelDelete() {
   sessionToDeleteName.value = ""
 }
 
+const batchDeleteSessionIds = ref([])
+const showBatchDeleteModal = ref(false)
+
+function onBatchDelete() {
+  const ids = Array.from(selectedSessionIds.value)
+  if (ids.length === 0) return
+  batchDeleteSessionIds.value = ids
+  showBatchDeleteModal.value = true
+}
+
+async function confirmBatchDelete() {
+  if (batchDeleteSessionIds.value.length === 0) {
+    addPopup("red", t.value.home.delErrNotFound, t.value.home.delErrNotFoundMsg)
+    return
+  }
+  try {
+    const result = await postDataOrPopupError("/batch_delete_sessions", {
+      session_ids: batchDeleteSessionIds.value,
+    })
+    if (result.deleted > 0) {
+      addPopup("green", t.value.home.batchDelOkTitle,
+        t.value.home.batchDelOkMsg.replace('{count}', result.deleted))
+      selectedSessionIds.value = new Set()
+    }
+    if (result.failed && result.failed.length > 0) {
+      addPopup("red", t.value.home.batchDelErrTitle,
+        `${result.failed.length} ${t.value.home.batchDelErrMsg}`)
+    }
+  } finally {
+    showBatchDeleteModal.value = false
+    batchDeleteSessionIds.value = []
+    setTimeout(fetchWebshell, 0)
+  }
+}
+
+function cancelBatchDelete() {
+  showBatchDeleteModal.value = false
+  batchDeleteSessionIds.value = []
+}
+
 function selectSession(session) {
   store.session = session.id
 }
@@ -318,6 +409,48 @@ function openEditModal(session) {
   editingSessionId.value = session.id
   store.session = session.id
   showAddModal.value = true
+}
+
+const showBatchImportModal = ref(false)
+const batchImportContent = ref("")
+const batchImportLoading = ref(false)
+const batchImportResult = ref(null)
+
+function openBatchImportModal() {
+  batchImportContent.value = ""
+  batchImportResult.value = null
+  showBatchImportModal.value = true
+}
+
+function closeBatchImportModal() {
+  showBatchImportModal.value = false
+  batchImportContent.value = ""
+  batchImportResult.value = null
+}
+
+async function confirmBatchImport() {
+  const content = batchImportContent.value.trim()
+  if (!content) {
+    addPopup("red", t.value.home.modal.batchImportResultTitle, t.value.home.modal.batchImportNoData)
+    return
+  }
+  batchImportLoading.value = true
+  batchImportResult.value = null
+  try {
+    const result = await postDataOrPopupError("/batch_import_webshells", {
+      content: content,
+      session_type: "ONELINE_PHP",
+      delimiter: "|",
+    })
+    batchImportResult.value = result
+    if (result.created > 0) {
+      setTimeout(fetchWebshell, 0)
+    }
+  } catch (e) {
+    // postDataOrPopupError 已经弹出错误
+  } finally {
+    batchImportLoading.value = false
+  }
 }
 
 </script>
@@ -352,6 +485,12 @@ function openEditModal(session) {
           </svg>
           {{ t.home.toolGenerate }}
         </button>
+        <button class="tool-btn secondary" @click="openBatchImportModal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          {{ t.home.toolBatchImport }}
+        </button>
         <button class="tool-btn primary" @click="openAddModal">
           <IconPlus />
           {{ t.home.modal.addTitle }}
@@ -360,10 +499,11 @@ function openEditModal(session) {
     </div>
 
     <div class="table-card shadow-box" v-if="sessions.length != 0">
+      <div class="table-scroll-wrapper">
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-checkbox"><input type="checkbox" /></th>
+            <th class="col-checkbox"><input type="checkbox" :checked="isAllPageSelected" @change="toggleSelectAllPage" /></th>
             <th v-for="col in tableColumns" :key="col.key" class="sortable-header" @click="toggleSort(col.key)">
               {{ col.label }}<span v-if="sortColumn === col.key" class="sort-indicator">{{ sortIndicator(col.key) }}</span>
             </th>
@@ -374,7 +514,7 @@ function openEditModal(session) {
           <tr v-for="session in pagedSessions" :key="session.id" @click="selectSession(session)"
             @contextmenu.prevent="(event) => onRowRightClick(event, session)"
             :class="{ selected: store.session === session.id }">
-            <td class="col-checkbox"><input type="checkbox" /></td>
+            <td class="col-checkbox" @click.stop><input type="checkbox" :checked="selectedSessionIds.has(session.id)" @change="toggleSessionSelection(session.id)" /></td>
             <td class="mono">{{ session.id.slice(0, 8) }}</td>
             <td class="session-name">{{ session.name }}</td>
             <td class="session-note">{{ session.note || '-' }}</td>
@@ -408,6 +548,7 @@ function openEditModal(session) {
           </tr>
         </tbody>
       </table>
+      </div>
       <Pagination :total="sessions.length" :page-size="pageSize" v-model="currentPage" />
     </div>
 
@@ -455,6 +596,30 @@ function openEditModal(session) {
     </transition>
   </Teleport>
 
+  <Teleport to="body">
+    <transition>
+      <div v-if="showBatchDeleteModal" class="modal-overlay" @click.self="cancelBatchDelete">
+        <div class="modal-container delete-modal-container" @click.stop>
+          <div class="modal-header">
+            <h2>{{ t.home.modal.batchDeleteTitle }}</h2>
+            <button class="modal-close" @click="cancelBatchDelete" :title="t.home.modal.close">
+              <IconCross />
+            </button>
+          </div>
+          <div class="modal-body delete-modal-body">
+            <p class="delete-modal-text">
+              {{ t.home.modal.batchDeleteConfirm }} <strong>{{ batchDeleteSessionIds.length }}</strong>{{ t.home.modal.batchDeleteConfirm2 }}
+            </p>
+            <div class="delete-modal-actions">
+              <button class="tool-btn secondary" @click="cancelBatchDelete">{{ t.home.modal.cancel }}</button>
+              <button class="tool-btn danger" @click="confirmBatchDelete">{{ t.home.modal.confirmDelete }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </Teleport>
+
   <WebshellGenerator :show="showGeneratorModal" @close="showGeneratorModal = false" />
 
   <Teleport to="body">
@@ -470,6 +635,52 @@ function openEditModal(session) {
           <div class="modal-body">
             <WebshellEditorMain :session="editingSessionId" modal-mode @saved="onAddSaved"
               @closed="showAddModal = false" />
+          </div>
+        </div>
+      </div>
+    </transition>
+  </Teleport>
+
+  <Teleport to="body">
+    <transition>
+      <div v-if="showBatchImportModal" class="modal-overlay" @click="closeBatchImportModal">
+        <div class="modal-container batch-import-modal-container" @click.stop>
+          <div class="modal-header">
+            <h2>{{ t.home.modal.batchImportTitle }}</h2>
+            <button class="modal-close" @click="closeBatchImportModal" :title="t.home.modal.close">
+              <IconCross />
+            </button>
+          </div>
+          <div class="modal-body batch-import-modal-body">
+            <p class="batch-import-hint">{{ t.home.modal.batchImportHint }}</p>
+            <textarea class="batch-import-textarea" v-model="batchImportContent" rows="12"
+              :placeholder="t.home.modal.batchImportPlaceholder" :disabled="batchImportLoading"></textarea>
+            <div v-if="batchImportResult" class="batch-import-result">
+              <p class="batch-import-result-title">{{ t.home.modal.batchImportResultTitle }}</p>
+              <p class="batch-import-result-success">
+                {{ t.home.modal.batchImportSuccess.replace('{count}', batchImportResult.created) }}
+              </p>
+              <p v-if="batchImportResult.skipped" class="batch-import-result-skipped">
+                {{ t.home.modal.batchImportSkipped.replace('{count}', batchImportResult.skipped) }}
+              </p>
+              <p v-if="batchImportResult.failed.length" class="batch-import-result-failed">
+                {{ t.home.modal.batchImportFailed.replace('{count}', batchImportResult.failed.length) }}
+              </p>
+              <ul v-if="batchImportResult.failed.length" class="batch-import-failed-list">
+                <li v-for="(item, idx) in batchImportResult.failed" :key="idx">
+                  {{ t.home.col.id }} {{ item.line }}: {{ item.reason }}
+                </li>
+              </ul>
+            </div>
+            <div class="batch-import-actions">
+              <button class="tool-btn secondary" @click="closeBatchImportModal" :disabled="batchImportLoading">
+                {{ t.home.modal.batchImportCancel }}
+              </button>
+              <button class="tool-btn primary" @click="confirmBatchImport" :disabled="batchImportLoading">
+                <span v-if="batchImportLoading" class="loading-spinner"></span>
+                {{ t.home.modal.batchImportStart }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -512,9 +723,14 @@ function openEditModal(session) {
         <div class="modal-container terminal-modal-container" @click.stop>
           <div class="modal-header">
             <h2>{{ t.home.terminalTitle }}</h2>
-            <button class="modal-close" @click="showTerminalModal = false" :title="t.home.modal.close">
-              <IconCross />
-            </button>
+            <div class="terminal-header-actions">
+              <button class="tool-btn secondary terminal-clear-btn" @click="clearTerminal" :title="t.home.clearTerminal">
+                {{ t.home.clearTerminal }}
+              </button>
+              <button class="modal-close" @click="showTerminalModal = false" :title="t.home.modal.close">
+                <IconCross />
+              </button>
+            </div>
           </div>
           <div class="modal-body terminal-modal-body">
             <TerminalMain v-if="terminalSession" :session="terminalSession" :pwd="terminalPwd" modal-mode
@@ -677,6 +893,9 @@ function openEditModal(session) {
   backdrop-filter: var(--card-backdrop);
   overflow: hidden;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .data-table {
@@ -891,8 +1110,11 @@ function openEditModal(session) {
   margin-top: 16px;
 }
 
-.table-card {
+.table-scroll-wrapper {
   overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
 
 .modal-overlay {
@@ -999,6 +1221,95 @@ function openEditModal(session) {
   gap: 12px;
 }
 
+.batch-import-modal-container {
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  height: auto;
+}
+
+.batch-import-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.batch-import-hint {
+  margin: 0;
+  color: var(--font-color-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.batch-import-textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 12px;
+  border: 1px solid var(--border-color-grey);
+  border-radius: var(--input-radius);
+  background-color: var(--input-bg);
+  color: var(--font-color-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.batch-import-textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.batch-import-textarea::placeholder {
+  color: var(--font-color-tertiary);
+}
+
+.batch-import-result {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: var(--card-radius);
+  background-color: var(--background-color-secondary);
+}
+
+.batch-import-result-title {
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+  color: var(--font-color-primary);
+}
+
+.batch-import-result-success {
+  margin: 0;
+  color: var(--success-color, #2ecc71);
+}
+
+.batch-import-result-skipped {
+  margin: 0;
+  color: var(--font-color-secondary);
+}
+
+.batch-import-result-failed {
+  margin: 0;
+  color: var(--danger-color, #e74c3c);
+}
+
+.batch-import-failed-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--font-color-secondary);
+  font-size: 0.85rem;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.batch-import-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
 .basic-info-modal-container {
   max-width: 700px;
   width: 90%;
@@ -1053,6 +1364,17 @@ function openEditModal(session) {
 
 .pre-wrap {
   white-space: pre-wrap;
+}
+
+.terminal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-clear-btn {
+  font-size: 0.85rem;
+  padding: 0 12px;
 }
 
 .terminal-modal-container,

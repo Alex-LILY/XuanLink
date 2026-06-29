@@ -1,6 +1,5 @@
 """Utils相关API路由"""
 
-import importlib.metadata
 import re
 from pathlib import PurePath, PurePosixPath, PureWindowsPath
 from uuid import UUID
@@ -28,8 +27,7 @@ def remote_path(filepath: str) -> PurePath:
 @router.get("/utils/version")
 async def version():
     """获取当前版本"""
-    current_version = importlib.metadata.version("ether_ghost")
-    return {"code": 0, "data": current_version}
+    return {"code": 0, "data": const.APP_VERSION}
 
 
 @router.get("/utils/background_image")

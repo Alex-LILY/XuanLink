@@ -15,7 +15,9 @@ import chardet
 from fastapi import APIRouter, Body, File, Form, Request, UploadFile
 from fastapi.responses import Response
 
-from .. import session_manager, session_types, session_connector
+from urllib.parse import urlparse
+
+from .. import core, session_manager, session_types, session_connector
 from ..core import SessionInterface, PHPSessionInterface, ProcessProtocol
 from ..utils import db
 from ..core import SessionException, UserError
@@ -116,6 +118,125 @@ async def update_webshell(session_info: session_types.SessionInfo):
     # 异步触发一次探测，立即更新主页的 OS/内网IP/用户名等缓存字段
     asyncio.create_task(session_probe.update_session_cache(session_info.session_id))
     return {"code": 0, "data": session_info.session_id}
+
+
+class BatchImportWebshellRequest(BaseModel):
+    """批量导入 WebShell 请求"""
+
+    content: str
+    session_type: str = "ONELINE_PHP"
+    delimiter: str = "|"
+
+
+class BatchImportResult(BaseModel):
+    """批量导入 WebShell 结果"""
+
+    created: int
+    skipped: int
+    failed: t.List[t.Dict[str, str]]
+    session_ids: t.List[UUID]
+
+
+def _get_default_connection(session_type: str) -> t.Dict[str, t.Any]:
+    """根据 session_type 获取连接选项默认值"""
+    if session_type not in core.session_type_info:
+        raise core.UserError(f"Session类型{session_type}不存在")
+    connection: t.Dict[str, t.Any] = {}
+    for group in core.session_type_info[session_type]["options"]:
+        for option in group["options"]:
+            if option["default_value"] is not None:
+                connection[option["id"]] = option["default_value"]
+    return connection
+
+
+@router.post("/batch_import_webshells")
+@catch_user_error
+async def batch_import_webshells(request: BatchImportWebshellRequest):
+    """批量导入 webshell，格式：URL|密码，每行一个"""
+    session_type = request.session_type
+    if session_type not in core.session_type_info:
+        raise core.UserError(f"Session类型{session_type}不存在")
+
+    default_connection = _get_default_connection(session_type)
+    created_session_ids: t.List[UUID] = []
+    failed: t.List[t.Dict[str, str]] = []
+    sessions_to_add: t.List[session_types.SessionInfo] = []
+    skipped = 0
+
+    # 收集已有的 URL 集合，用于去重
+    existing_urls: t.Set[str] = set()
+    for s in db.list_sessions():
+        url = s.connection.get("url", "")
+        if url:
+            existing_urls.add(url.strip())
+    # 当前批次内的 URL 集合，防止同一批里也出现重复
+    batch_urls: t.Set[str] = set()
+
+    lines = request.content.splitlines()
+    for idx, raw_line in enumerate(lines, start=1):
+        line = raw_line.strip()
+        if not line:
+            continue
+
+        # 支持 \| 转义分隔符
+        parts = line.split(request.delimiter)
+        # 处理转义：把被 \ 转义的 | 重新合并
+        merged: t.List[str] = []
+        current = ""
+        for part in parts:
+            if current.endswith("\\"):
+                current = current[:-1] + request.delimiter + part
+            else:
+                if current:
+                    merged.append(current)
+                current = part
+        merged.append(current)
+
+        if len(merged) < 2:
+            failed.append({"line": str(idx), "reason": "格式错误，需要 URL|密码"})
+            continue
+        url = merged[0].strip()
+        password = merged[1].strip()
+        if not url:
+            failed.append({"line": str(idx), "reason": "URL 为空"})
+            continue
+        if not password:
+            failed.append({"line": str(idx), "reason": "密码为空"})
+            continue
+
+        if url in existing_urls or url in batch_urls:
+            skipped += 1
+            continue
+        batch_urls.add(url)
+
+        connection = {**default_connection, "url": url, "password": password}
+        # 自动生成名称：使用 URL 最后一段路径
+        parsed = urlparse(url)
+        path_name = parsed.path.split("/")[-1] or "shell"
+        name = path_name
+
+        session_info = session_types.SessionInfo(
+            session_type=session_type,
+            name=name,
+            note="批量导入",
+            connection=connection,
+        )
+        sessions_to_add.append(session_info)
+
+    if sessions_to_add:
+        db.add_session_infos(sessions_to_add)
+        session_manager.clear_session_cache()
+        for session_info in sessions_to_add:
+            created_session_ids.append(session_info.session_id)
+            asyncio.create_task(session_probe.update_session_cache(session_info.session_id))
+
+    result = BatchImportResult(
+        created=len(sessions_to_add),
+        skipped=skipped,
+        failed=failed,
+        session_ids=created_session_ids,
+    )
+    return {"code": 0, "data": result.model_dump()}
 
 
 @router.get("/session")
@@ -489,6 +610,33 @@ async def delete_session(session_id: UUID):
         return {"code": -400, "msg": "没有这个session"}
     await session_manager.delete_session_info_by_id(session_id)
     return {"code": 0, "data": True}
+
+
+class BatchDeleteRequest(BaseModel):
+    """批量删除 WebShell 请求"""
+
+    session_ids: t.List[UUID]
+
+
+@router.post("/batch_delete_sessions")
+@catch_user_error
+async def batch_delete_sessions(request: BatchDeleteRequest):
+    """批量删除 session"""
+    deleted = 0
+    failed: t.List[t.Dict[str, str]] = []
+    for session_id in request.session_ids:
+        session = session_manager.get_session_info_by_id(session_id)
+        if session is None:
+            failed.append({"session_id": str(session_id), "reason": "没有这个session"})
+            continue
+        try:
+            await session_manager.delete_session_info_by_id(session_id)
+            deleted += 1
+        except Exception as exc:
+            logger.exception("批量删除 session 失败: %s", session_id)
+            failed.append({"session_id": str(session_id), "reason": f"删除失败：{exc}"})
+    session_manager.clear_session_cache()
+    return {"code": 0, "data": {"deleted": deleted, "failed": failed}}
 
 
 def _get_process(process_id: UUID) -> ProcessProtocol:

@@ -1,13 +1,45 @@
 import os
+import subprocess
 from pathlib import Path
 
 
+APP_VERSION = "0.2.5"
 SETTINGS_VERSION = "0.0.1"
 DB_FILENAME = "store.db"
 
-# 当前操作系统的数据保存位置
-# TODO: 允许用户自定义
-if os.name == "posix":
+
+def _is_wsl() -> bool:
+    try:
+        with open("/proc/version") as f:
+            return "microsoft" in f.read().lower()
+    except Exception:
+        return False
+
+
+def _wsl_windows_appdata() -> "Path | None":
+    """在 WSL 中调用 cmd.exe 获取 Windows 的 APPDATA 路径并转换为 WSL 路径。"""
+    try:
+        result = subprocess.run(
+            ["cmd.exe", "/c", "echo %APPDATA%"],
+            capture_output=True, text=True, timeout=3
+        )
+        appdata = result.stdout.strip()
+        if appdata and len(appdata) > 2 and appdata[1] == ":":
+            drive = appdata[0].lower()
+            rest = appdata[3:].replace("\\", "/")
+            return Path(f"/mnt/{drive}/{rest}/ShadowHalberd")
+    except Exception:
+        pass
+    return None
+
+
+# 数据目录：优先使用环境变量，其次自动检测，最后按系统默认
+if os.environ.get("SHADOWHALBERD_DATA"):
+    DATA_FOLDER = Path(os.environ["SHADOWHALBERD_DATA"])
+elif os.name == "posix" and _is_wsl():
+    _wsl_path = _wsl_windows_appdata()
+    DATA_FOLDER = _wsl_path if _wsl_path else Path("~/.local/share/ShadowHalberd").expanduser()
+elif os.name == "posix":
     DATA_FOLDER = Path("~/.local/share/ShadowHalberd").expanduser()
 elif os.name == "nt":
     DATA_FOLDER = Path("~/AppData/Roaming/ShadowHalberd").expanduser()
