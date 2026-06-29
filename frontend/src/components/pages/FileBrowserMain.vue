@@ -770,6 +770,14 @@ function readableFilePerm(filePerm) {
           <IconLoad />
         </div>
       </form>
+      <div class="breadcrumb-bar">
+        <span
+          v-for="(crumb, index) in breadcrumbs"
+          :key="index"
+          class="breadcrumb-item"
+          @click="jumpBreadcrumb(index)"
+        >{{ crumb.name }}</span>
+      </div>
       <div class="file-list-panel scrollbar shadow-box" @click.right.stop="onRightClickEmpty">
         <div class="file-list-header">
           <div class="col-name">{{ t.fileBrowser.colName }}</div>
@@ -1048,6 +1056,48 @@ input[type="text"] {
 
 .tool-btn.secondary:hover {
   background-color: var(--button-secondary-hover-bg);
+}
+
+.breadcrumb-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  font-size: 0.82rem;
+  color: var(--font-color-secondary);
+  min-height: 1.8rem;
+}
+
+.breadcrumb-item {
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--font-color-secondary);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.breadcrumb-item:hover {
+  background-color: var(--hover-bg);
+  color: var(--accent-color);
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: "/";
+  margin-left: 4px;
+  color: var(--font-color-muted);
+  pointer-events: none;
+}
+
+.breadcrumb-item:last-child {
+  color: var(--font-color-primary);
+  font-weight: var(--font-weight-medium);
+  cursor: default;
+}
+
+.breadcrumb-item:last-child:hover {
+  background-color: transparent;
+  color: var(--font-color-primary);
 }
 
 .file-list-panel {
