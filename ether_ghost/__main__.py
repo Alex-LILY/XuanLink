@@ -25,7 +25,7 @@ def open_browser(url):
 def parse_args():
     parser = argparse.ArgumentParser(description="Example program")
 
-    parser.add_argument("--host", help="Host to connect to", default="0.0.0.0")
+    parser.add_argument("--host", help="Host to connect to", default="127.0.0.1")
     parser.add_argument("--port", type=int, help="Port to use", default=8022)
     parser.add_argument("--no-browser", action="store_true", help="Do not open browser")
 
@@ -38,7 +38,9 @@ def main():
 
     args = parse_args()
     if not args.no_browser:
-        open_browser(f"http://{args.host}:{args.port}")
+        # 0.0.0.0 在浏览器中无法直接访问，统一替换为 127.0.0.1
+        browser_host = "127.0.0.1" if args.host == "0.0.0.0" else args.host
+        open_browser(f"http://{browser_host}:{args.port}")
     uvicorn.run(app, host=args.host, port=args.port)
 
 

@@ -60,7 +60,7 @@ logger = logging.getLogger("main")
 
 # uuid: (filename, blob_path)
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 
 
 class FileContentRequest(BaseModel):

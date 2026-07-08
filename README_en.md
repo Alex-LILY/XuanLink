@@ -117,7 +117,7 @@ Then open `http://127.0.0.1:8022` in your browser.
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--host` | `0.0.0.0` | Bind address |
+| `--host` | `127.0.0.1` | Bind address |
 | `--port` | `8022` | Bind port |
 | `--no-browser` | - | Do not open browser automatically |
 
