@@ -10,9 +10,7 @@
   <a href="https://github.com/Alex-LILY/XuanLink">GitHub</a>
 </p>
 
-**XuanLink** is a modern webshell manager with a clean web UI and broad protocol support, designed for authorized penetration testing, red teaming, and security research.
-
-It runs as a B/S application: deploy it on a server or run it locally, then manage target sessions entirely through your browser, avoiding the need to keep sensitive tooling on your local machine.
+**XuanLink** is a modern webshell manager designed for authorized penetration testing, red teaming, and security research. Built with a B/S architecture, it can be deployed on a server or run locally, allowing you to manage target sessions entirely through a browser without leaving sensitive tooling on your local machine.
 
 ---
 
@@ -21,30 +19,13 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Quick Start](#quick-start)
-  - [Install from pip](#install-from-pip)
-  - [Run from source](#run-from-source)
-  - [Run with Poetry](#run-with-poetry)
-  - [Common Options](#common-options)
 - [User Guide](#user-guide)
-  - [Creating a Session](#creating-a-session)
-  - [File Management](#file-management)
-  - [Command Execution](#command-execution)
-  - [Forward Proxy](#forward-proxy)
-  - [Reverse Shell](#reverse-shell)
 - [Customization](#customization)
-  - [Custom Encoder](#custom-encoder)
-  - [Custom Decoder](#custom-decoder)
-  - [Import AntSword Plugins](#import-antsword-plugins)
-  - [Custom Wallpaper](#custom-wallpaper)
 - [Development](#development)
-  - [Building the Frontend](#building-the-frontend)
-  - [Packaging as Executable](#packaging-as-executable)
-  - [Project Structure](#project-structure)
 - [Supported Operations](#supported-operations)
 - [FAQ](#faq)
 - [Disclaimer](#disclaimer)
 - [License](#license)
-- [Acknowledgements](#acknowledgements)
 
 ---
 
@@ -55,34 +36,34 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 | Protocol | Supported Types |
 |----------|-----------------|
 | **XuanLink Native** | PHP / JSP / ASPX |
-| **Behinder** | PHP AES/XOR, JSP AES, JSPX AES, ASP XOR, ASPX AES |
+| **Behinder** | PHP AES/XOR, JSP AES, JSPX AES, ASP XOR, ASPEX AES |
 | **Godzilla** | PHP XOR, ASP XOR, ASPX AES, JSP AES, JSPX AES |
 | **Linux Command** | Direct command execution |
-| **Reverse Shell** | TCP reverse shell listener with persistent connections |
+| **Reverse Shell** | TCP listener with persistent connections |
 
 ### Modern UI
 
-- **New "Modern Dark" theme**: blue-purple gradients, glassmorphism cards, animated background
-- **Multiple preset themes**: Pro Panel, Command Terminal, Aurora Glass, Cyber Neon, Parchment
-- **Customizable font size and background image**
+- Multiple themes: Pro Panel, Terminal, Glass, Cyber, Paper, Modern
+- Customizable font size and background image
+- Session list with tag-based grouping, sorting, search, and batch operations
+- File management with modification time column and breadcrumb navigation
 
 ### Practical Features
 
-- Alive probing, basic information collection, command execution
-- File management: directory browsing, file read/write, upload, download
+- Alive probing and basic information collection
+- Command execution and file management (browse, upload, download, edit)
 - PHP code execution and `phpinfo` download
-- TCP forward proxy and pseudo-forward proxy (gopher/SSRF)
-- HTTP / SOCKS5 forward proxy (via Vessel)
-- HTTP / SOCKS5 outbound proxy pool: manage, speed-test, and switch proxies
-- AntSword integration to leverage part of its plugin ecosystem
+- TCP / HTTP / SOCKS5 forward proxy and proxy pool management
 - Reverse shell listener with persistent connections
+- Batch session import and batch tag assignment
+- Mandatory password change on first login
 
 ### Security & Privacy
 
-- **RSA2048 + AES256-CBC** encrypted communication
+- RSA2048 + AES256 encrypted communication
 - Random User-Agent and HTTP junk-data padding
-- Custom encoders/decoders with partial AntSword encoder support
-- XuanLink webshell uses encryption + obfuscation to hide traffic inside random data
+- Custom encoders/decoders with partial AntSword plugin support
+- Custom modules and AntSword encoders disabled by default
 
 ---
 
@@ -96,11 +77,6 @@ It runs as a B/S application: deploy it on a server or run it locally, then mana
 <p align="center">
   <b>File Management</b><br>
   <img src="./assets/文件管理.png" alt="File Management" width="90%">
-</p>
-
-<p align="center">
-  <b>Login Interface</b><br>
-  <img src="./assets/登录界面.png" alt="Login Interface" width="90%">
 </p>
 
 ---
@@ -127,14 +103,12 @@ python -m ether_ghost --host 127.0.0.1 --port 8022
 
 ### Run with Poetry
 
-This project uses [Poetry](https://python-poetry.org/) for dependency management:
-
 ```shell
 poetry install
 poetry run ether_ghost
 ```
 
-Open `http://127.0.0.1:8022` in your browser.
+Then open `http://127.0.0.1:8022` in your browser.
 
 > **Default credentials**: `admin` / `admin123`  
 > You will be required to change the default password on first login.
@@ -143,10 +117,9 @@ Open `http://127.0.0.1:8022` in your browser.
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--host` | `127.0.0.1` | Bind address |
+| `--host` | `0.0.0.0` | Bind address |
 | `--port` | `8022` | Bind port |
-| `--no-browser` | `false` | Do not open browser automatically |
-| `--auth USER:PWD` | - | Enable basic auth for the API |
+| `--no-browser` | - | Do not open browser automatically |
 
 ---
 
@@ -154,103 +127,51 @@ Open `http://127.0.0.1:8022` in your browser.
 
 ### Creating a Session
 
-1. Open the web UI and click "New Session"
+1. Open the web UI and click "Add"
 2. Select the webshell type (XuanLink / Behinder / Godzilla / Linux CMD)
-3. Fill in the URL, password, and connection parameters
-4. Save and click "Connect" to test
+3. Fill in the URL, password, and connection parameters, then save
+4. Right-click the session and select "Probe cache" to test the connection
 
 ### File Management
 
-After entering a session, select the "Files" tab to:
-
-- Browse the target host directory structure
-- Upload, download, delete, and rename files
-- Edit text files online
+Select the "Files" tab after entering a session to browse directories, upload/download files, edit text files online, and view modification times.
 
 ### Command Execution
 
-Select the "Terminal" tab to execute system commands on the target host, featuring:
-
-- Interactive command line
-- Command history
-- Real-time output display
+Select the "Terminal" tab to execute system commands on the target host with an interactive command line and history support.
 
 ### Forward Proxy
 
-XuanLink supports two types of forward proxy:
-
-- **Vessel Forward Proxy**: A persistent proxy implemented via PHP memory shell, supporting both file and Session communication
-- **Pseudo-Forward Proxy**: Forwards traffic via the gopher protocol in an SSRF-like manner, mainly suitable for HTTP-like protocols
+- **Vessel Forward Proxy**: A persistent proxy implemented via a PHP memory shell
+- **Pseudo-Forward Proxy**: Forwards traffic via the gopher protocol in an SSRF-like manner
 
 ### Reverse Shell
 
-Create a TCP listener in "Connectors". Once the target host connects, you get a persistent shell session.
+Create a TCP listener in "Connectors". Once the target connects, you get a persistent shell session.
 
 ---
 
 ## Customization
 
-### Custom Encoder
+### Custom Encoder / Decoder
 
-Open the XuanLink configuration folder (printed at startup), find the `modules/php_encoders` directory, and create a Python file:
+Find the configuration folder printed at startup, then create Python files under `modules/php_encoders` or `modules/php_decoders`. Restart to apply changes.
 
-```python
-import base64
-
-def encode(code: str):
-    return f"eval(base64_decode({base64.b64encode(code.encode()).decode()!r}));"
-```
-
-Restart XuanLink and the encoder will appear in the webshell editing page.
-
-### Custom Decoder
-
-Create a Python file under `modules/php_decoders`:
-
-```python
-import base64
-
-phpcode = """
-function decoder_echo_raw($s) {
-    echo base64_encode($s);
-}
-"""
-
-def decode(s: str) -> str:
-    return base64.b64decode(s).decode()
-```
-
-Restart to take effect.
+> Note: Custom modules are disabled by default. Set `SHADOWHALBERD_ENABLE_CUSTOM_MODULES=1` before starting.
 
 ### Import AntSword Plugins
 
-Find the `AntSwordEncoder` or `AntSwordDecoder` directory in the configuration folder, drop in the corresponding `.js` files, and restart.
-
-Example `AntSwordEncoder/example-base64.js`:
-
-```js
-module.exports = (pwd, data, ext={}) => {
-    let randomID = `_0x${Math.random().toString(16).substr(2)}`;
-    data[randomID] = Buffer.from(data['_']).toString('base64');
-    data[pwd] = `eval(base64_decode($_POST[${randomID}]));`;
-    delete data['_'];
-    return data;
-}
-```
-
-> Note: XuanLink does not support some AntSword environment variables that are tightly coupled with AntSword internals. Some plugins may need modification before use.
+Place `.js` plugin files into the `AntSwordEncoder` or `AntSwordDecoder` directory under the configuration folder, then set `SHADOWHALBERD_ENABLE_ANTSWORD_ENCODERS=1` and restart.
 
 ### Custom Wallpaper
 
-Rename your wallpaper image to `bg.jpg`, `bg.png`, or `bg.webp`, place it in the XuanLink configuration folder, then set the theme to "Glass" in the settings page.
+Rename your wallpaper image to `bg.jpg`, `bg.png`, or `bg.webp`, place it in the configuration folder, then set the theme to "Glass" in settings.
 
 ---
 
 ## Development
 
 ### Building the Frontend
-
-The frontend lives in `frontend/` and is built with Vite. After any frontend change you must rebuild:
 
 ```shell
 cd frontend
@@ -261,44 +182,28 @@ rm -rf ether_ghost/public
 mv frontend/dist ether_ghost/public
 ```
 
-Or use the root script:
+Or simply run:
 
 ```shell
 bash build.sh
 ```
-
-> Note: The build output in `ether_ghost/public/` should be committed together with the source changes, never on its own.
-
-### Packaging as Executable
-
-#### Linux
-
-```shell
-bash build.sh
-pip install pyinstaller
-python pyinstaller_package.bat  # Adjust paths inside the script first
-```
-
-#### Windows
-
-See [`pyinstaller_package.bat`](./pyinstaller_package.bat), replace the virtual-environment path with your local `site-packages` directory, then run it.
 
 ### Project Structure
 
 ```text
 XuanLink/
-├── ether_ghost/          # Backend source
-│   ├── api/              # FastAPI routes
-│   ├── core/             # Core protocols and generators
+├── ether_ghost/          # Backend source (FastAPI)
+│   ├── api/              # API routes
+│   ├── core/             # Core protocols
 │   ├── sessions/         # Webshell session implementations
-│   ├── session_connectors/  # Persistent connectors (reverse shell, etc.)
+│   ├── session_connectors/  # Reverse shell connectors
 │   ├── wsm_payloads/     # Behinder / Godzilla payloads
 │   └── public/           # Frontend build output
 ├── frontend/             # Frontend source (Vue 3 + Vite)
 ├── test_environment/     # Local test webshells
 ├── tests/                # Test cases
-├── assets/               # Project screenshots and assets
-├── build.sh              # Frontend build script
+├── assets/               # Screenshots and assets
+├── build.sh              # Build script
 ├── pyproject.toml        # Poetry configuration
 ├── requirements.txt      # pip dependencies
 └── README.md             # Chinese README
@@ -326,15 +231,15 @@ XuanLink/
 
 ### Q: Why can't encoders and decoders be added from the web UI?
 
-Encoders and decoders are loaded as code when the server starts. If an attacker logs into your XuanLink instance, they could take control of the server by adding an encoder. To prevent RCE vulnerabilities, XuanLink does not support adding encoders/decoders from the web UI.
+Encoders and decoders are loaded as code when the server starts. To prevent an attacker who gains access to your XuanLink instance from controlling the server by injecting malicious code, they must be configured via files rather than the web UI.
 
-### Q: What is Vessel? Why are there two forward proxy modes?
+### Q: What is Vessel?
 
-Vessel is a custom PHP memory shell developed for XuanLink, supporting both file and Session communication. The pseudo-forward proxy forwards traffic via the gopher protocol in an SSRF-like manner and is basically limited to HTTP-like protocols.
+Vessel is a custom PHP memory shell developed for XuanLink. It supports both file-based and Session-based communication and is used to implement a stable forward proxy.
 
 ### Q: How is the XuanLink webshell different from traditional one-liner webshells?
 
-Traditional one-liner webshells have obvious features and are easily detected. XuanLink webshell encrypts and obfuscates traffic, uses XOR encoding, and uses special 8-byte markers to locate the payload. This allows the payload to be embedded in arbitrary data such as images, significantly reducing the chance of detection.
+Traditional one-liner webshells have obvious features and are easily detected. XuanLink webshell encrypts and obfuscates traffic, uses XOR encoding, and uses special 8-byte markers to locate the payload, allowing it to be embedded in arbitrary data and significantly reducing the chance of detection.
 
 ---
 
@@ -347,9 +252,3 @@ This project is intended only for **authorized security testing, vulnerability r
 ## License
 
 This project is open-sourced under the [MIT License](./LICENSE).
-
----
-
-## Acknowledgements
-
-Inspired by excellent tools such as AntSword, Behinder, and Godzilla, with reference to implementations such as [EtherGhost](https://github.com/Marven11/EtherGhost) and [wsm](https://github.com/xiecat/wsm).

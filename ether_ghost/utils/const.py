@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-APP_VERSION = "0.2.5"
+APP_VERSION = "0.3.0"
 SETTINGS_VERSION = "0.0.1"
 DB_FILENAME = "store.db"
 
